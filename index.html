@@ -1,0 +1,1771 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <base target="_top">
+  <meta charset="utf-8">
+  <title>Partner Help Center</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  /* Styles.html — shared design tokens and components (partner portal + admin dashboard). */
+  :root {
+    --brand: #0E7C66;
+    --brand-dark: #0A5C4C;
+    --brand-tint: #E7F4F0;
+    --brand-tint-2: #F2F9F7;
+    --bg: #F4F6F6;
+    --surface: #FFFFFF;
+    --text: #18232B;
+    --muted: #5B6770;
+    --faint: #8A959C;
+    --border: #E2E7E9;
+    --danger: #C0392B;
+    --danger-tint: #FDECEA;
+    --warning: #A86A00;
+    --warning-tint: #FFF5E0;
+    --success: #18804F;
+    --success-tint: #E6F5EC;
+    --info: #1F5FAD;
+    --info-tint: #E8F0FB;
+    --radius: 14px;
+    --radius-sm: 10px;
+    --shadow: 0 1px 2px rgba(16, 24, 32, .05), 0 4px 16px rgba(16, 24, 32, .06);
+    --shadow-lg: 0 8px 32px rgba(16, 24, 32, .16);
+    --font: 'Inter', system-ui, -apple-system, 'Segoe UI', Roboto, 'Noto Sans', 'Noto Sans Devanagari', 'Noto Sans Tamil',
+      'Noto Sans Telugu', 'Noto Sans Kannada', 'Noto Sans Malayalam', sans-serif;
+  }
+  * { box-sizing: border-box; }
+  html, body { margin: 0; padding: 0; }
+  body { font-family: var(--font); font-size: 15px; line-height: 1.5; color: var(--text); background: var(--bg); -webkit-font-smoothing: antialiased; }
+  h1, h2, h3, h4 { margin: 0; line-height: 1.25; }
+  h1 { font-size: 22px; font-weight: 700; letter-spacing: -.01em; }
+  h2 { font-size: 18px; font-weight: 650; }
+  h3 { font-size: 15px; font-weight: 600; }
+  p { margin: 0; }
+  a { color: var(--brand); }
+  button, input, select, textarea { font: inherit; color: inherit; }
+  .hidden { display: none !important; }
+  .muted { color: var(--muted); }
+  .small { font-size: 13px; }
+  .tiny { font-size: 12px; }
+  .mt-4 { margin-top: 4px; } .mt-8 { margin-top: 8px; } .mt-12 { margin-top: 12px; } .mt-16 { margin-top: 16px; } .mt-24 { margin-top: 24px; }
+  .row { display: flex; gap: 12px; align-items: center; }
+  .row.wrap { flex-wrap: wrap; }
+  .spacer { flex: 1; }
+  .sr-only { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
+  .icon { width: 20px; height: 20px; flex: none; stroke: currentColor; fill: none; stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round; }
+  .icon.sm { width: 16px; height: 16px; }
+  .icon.lg { width: 28px; height: 28px; }
+
+  /* Top bar */
+  .topbar { background: var(--surface); border-bottom: 1px solid var(--border); position: sticky; top: 0; z-index: 20; }
+  .topbar-inner { display: flex; align-items: center; gap: 10px; padding: 12px 16px; max-width: 1200px; margin: 0 auto; }
+  .logo { width: 34px; height: 34px; border-radius: 10px; background: var(--brand); color: #fff; display: grid; place-items: center; font-weight: 700; font-size: 13px; letter-spacing: .02em; }
+  .brand-name { font-weight: 650; font-size: 15px; }
+  .brand-sub { font-size: 12px; color: var(--muted); }
+
+  /* Cards */
+  .card { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); box-shadow: var(--shadow); padding: 20px; }
+  .card + .card { margin-top: 12px; }
+  .card-title { display: flex; align-items: center; gap: 10px; }
+  .icon-badge { width: 40px; height: 40px; border-radius: 12px; background: var(--brand-tint); color: var(--brand); display: grid; place-items: center; flex: none; }
+
+  /* Forms */
+  .field { margin-top: 16px; }
+  .field:first-child { margin-top: 0; }
+  label.label, .label { display: block; font-weight: 600; font-size: 14px; margin-bottom: 6px; }
+  .req { color: var(--danger); margin-left: 2px; }
+  .hint { font-size: 12.5px; color: var(--muted); margin-top: 4px; }
+  .input, select.input, textarea.input {
+    width: 100%; min-height: 46px; padding: 11px 12px; border: 1.5px solid var(--border); border-radius: var(--radius-sm); background: #fff;
+    transition: border-color .15s, box-shadow .15s; font-size: 16px; /* 16px stops iOS zoom */
+  }
+  textarea.input { min-height: 120px; resize: vertical; }
+  .input:focus { outline: none; border-color: var(--brand); box-shadow: 0 0 0 3px rgba(14, 124, 102, .15); }
+  .input[readonly] { background: var(--bg); color: var(--muted); }
+  .input-group { display: flex; align-items: stretch; }
+  .input-group .prefix { display: grid; place-items: center; padding: 0 12px; border: 1.5px solid var(--border); border-right: 0; border-radius: var(--radius-sm) 0 0 var(--radius-sm); background: var(--bg); color: var(--muted); font-weight: 600; }
+  .input-group .input { border-radius: 0 var(--radius-sm) var(--radius-sm) 0; }
+  .field.invalid .input, .field.invalid .lang-grid, .field.invalid .check { border-color: var(--danger); }
+  .error { display: none; color: var(--danger); font-size: 13px; margin-top: 6px; }
+  .field.invalid .error { display: flex; gap: 6px; align-items: flex-start; }
+  .grid-2 { display: grid; grid-template-columns: 1fr; gap: 0 14px; }
+  @media (min-width: 560px) { .grid-2 { grid-template-columns: 1fr 1fr; } .grid-2 .field { margin-top: 16px; } }
+
+  .check { display: flex; gap: 10px; align-items: flex-start; padding: 12px; border: 1.5px solid var(--border); border-radius: var(--radius-sm); cursor: pointer; background: #fff; }
+  .check input { width: 20px; height: 20px; margin: 1px 0 0; accent-color: var(--brand); flex: none; }
+
+  /* Buttons */
+  .btn { display: inline-flex; align-items: center; justify-content: center; gap: 8px; min-height: 46px; padding: 0 18px; border-radius: var(--radius-sm);
+    border: 1.5px solid transparent; font-weight: 600; cursor: pointer; text-decoration: none; transition: background .15s, border-color .15s, opacity .15s; white-space: nowrap; }
+  .btn:focus-visible { outline: 3px solid rgba(14, 124, 102, .35); outline-offset: 2px; }
+  .btn-primary { background: var(--brand); color: #fff; }
+  .btn-primary:hover { background: var(--brand-dark); }
+  .btn-secondary { background: #fff; color: var(--text); border-color: var(--border); }
+  .btn-secondary:hover { border-color: #c9d1d4; }
+  .btn-ghost { background: transparent; color: var(--brand); padding: 0 10px; }
+  .btn-danger { background: var(--danger); color: #fff; }
+  .btn-sm { min-height: 36px; padding: 0 12px; font-size: 13.5px; }
+  .btn[disabled] { opacity: .55; cursor: not-allowed; }
+  .btn .spinner { width: 16px; height: 16px; border-width: 2px; border-color: rgba(255,255,255,.4); border-top-color: #fff; }
+  .btn-secondary .spinner { border-color: rgba(0,0,0,.15); border-top-color: var(--brand); }
+  .btn-block { width: 100%; }
+
+  /* Badges */
+  .badge { display: inline-flex; align-items: center; gap: 6px; padding: 3px 10px; border-radius: 999px; font-size: 12.5px; font-weight: 600; background: var(--bg); color: var(--muted); white-space: nowrap; }
+  .badge::before { content: ''; width: 7px; height: 7px; border-radius: 50%; background: currentColor; }
+  .st-new { background: var(--info-tint); color: var(--info); }
+  .st-assigned { background: #EFEAFB; color: #5B3FB0; }
+  .st-in-progress { background: var(--warning-tint); color: var(--warning); }
+  .st-waiting-for-partner { background: #FFF0E6; color: #B4501A; }
+  .st-resolved { background: var(--success-tint); color: var(--success); }
+  .st-reopened { background: #FDEBF3; color: #A3245E; }
+  .st-rejected { background: var(--danger-tint); color: var(--danger); }
+
+  /* Alerts / notices */
+  .notice { display: flex; gap: 10px; padding: 12px 14px; border-radius: var(--radius-sm); background: var(--brand-tint-2); border: 1px solid var(--brand-tint); font-size: 13.5px; }
+  .notice.warn { background: var(--warning-tint); border-color: #F6E2B6; }
+  .notice.danger { background: var(--danger-tint); border-color: #F5C6C0; color: #8E2A20; }
+  .notice .icon { color: var(--brand); margin-top: 1px; }
+  .notice.warn .icon { color: var(--warning); }
+  .notice.danger .icon { color: var(--danger); }
+
+  /* Spinner, loading, toasts */
+  .spinner { width: 28px; height: 28px; border: 3px solid var(--brand-tint); border-top-color: var(--brand); border-radius: 50%; animation: spin .8s linear infinite; display: inline-block; }
+  @keyframes spin { to { transform: rotate(360deg); } }
+  .overlay { position: fixed; inset: 0; background: rgba(244, 246, 246, .75); display: grid; place-items: center; z-index: 100; backdrop-filter: blur(2px); }
+  .overlay-box { background: #fff; border-radius: var(--radius); box-shadow: var(--shadow-lg); padding: 22px 26px; display: flex; gap: 14px; align-items: center; font-weight: 600; max-width: 90vw; }
+  .toasts { position: fixed; left: 50%; bottom: 20px; transform: translateX(-50%); display: flex; flex-direction: column; gap: 8px; z-index: 200; width: min(92vw, 420px); }
+  .toast { background: var(--text); color: #fff; padding: 12px 16px; border-radius: 12px; box-shadow: var(--shadow-lg); font-size: 14px; display: flex; gap: 10px; align-items: flex-start; animation: rise .2s ease-out; }
+  .toast.success { background: var(--success); }
+  .toast.error { background: var(--danger); }
+  @keyframes rise { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: none; } }
+
+  .empty { text-align: center; padding: 32px 16px; color: var(--muted); }
+  .empty .icon { width: 40px; height: 40px; color: var(--faint); margin-bottom: 8px; }
+
+  /* Timeline */
+  .timeline { list-style: none; margin: 0; padding: 0; }
+  .timeline li { position: relative; padding: 0 0 18px 26px; }
+  .timeline li::before { content: ''; position: absolute; left: 6px; top: 6px; bottom: -6px; width: 2px; background: var(--border); }
+  .timeline li:last-child::before { display: none; }
+  .timeline li::after { content: ''; position: absolute; left: 0; top: 4px; width: 14px; height: 14px; border-radius: 50%; background: #fff; border: 3px solid var(--brand); }
+  .timeline .t-head { display: flex; gap: 8px; align-items: center; flex-wrap: wrap; }
+  .timeline .t-meta { font-size: 12.5px; color: var(--muted); }
+  .timeline .t-body { margin-top: 4px; font-size: 14px; white-space: pre-wrap; word-break: break-word; }
+  .timeline .t-note { margin-top: 6px; font-size: 13.5px; background: var(--warning-tint); border-radius: 8px; padding: 8px 10px; white-space: pre-wrap; }
+
+  /* Definition list */
+  .dl { display: grid; grid-template-columns: minmax(120px, 38%) 1fr; gap: 8px 14px; font-size: 14px; }
+  .dl dt { color: var(--muted); }
+  .dl dd { margin: 0; font-weight: 500; word-break: break-word; white-space: pre-wrap; }
+</style>
+
+  <style>
+    /* Partner portal layout */
+    .shell { max-width: 640px; margin: 0 auto; padding: 16px 16px 120px; }
+    .stepper { display: grid; grid-template-columns: repeat(4, 1fr); gap: 6px; margin: 4px 0 16px; }
+    .step { display: flex; flex-direction: column; gap: 6px; }
+    .step .bar { height: 5px; border-radius: 99px; background: var(--border); }
+    .step .lbl { font-size: 11.5px; color: var(--faint); font-weight: 600; line-height: 1.25; }
+    .step .num { display: none; }
+    .step.done .bar, .step.active .bar { background: var(--brand); }
+    .step.active .lbl { color: var(--brand); }
+    .step.done .lbl { color: var(--muted); }
+    .step-count { font-size: 12px; color: var(--muted); font-weight: 600; margin-bottom: 6px; }
+
+    .hero { display: flex; gap: 14px; align-items: flex-start; margin-bottom: 18px; }
+    .hero .icon-badge { width: 48px; height: 48px; }
+
+    .lang-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 8px; border: 1.5px solid transparent; border-radius: var(--radius-sm); }
+    @media (min-width: 480px) { .lang-grid { grid-template-columns: repeat(3, 1fr); } }
+    .lang-opt { position: relative; }
+    .lang-opt input { position: absolute; opacity: 0; pointer-events: none; }
+    .lang-opt span { display: flex; flex-direction: column; gap: 1px; padding: 10px 12px; border: 1.5px solid var(--border); border-radius: var(--radius-sm); cursor: pointer; background: #fff; min-height: 56px; justify-content: center; transition: border-color .15s, background .15s; }
+    .lang-opt b { font-size: 15.5px; font-weight: 600; }
+    .lang-opt small { font-size: 12px; color: var(--muted); }
+    .lang-opt input:checked + span { border-color: var(--brand); background: var(--brand-tint-2); box-shadow: inset 0 0 0 1px var(--brand); }
+    .lang-opt input:focus-visible + span { outline: 3px solid rgba(14,124,102,.35); outline-offset: 1px; }
+
+    .actions { position: fixed; left: 0; right: 0; bottom: 0; background: rgba(255,255,255,.96); border-top: 1px solid var(--border); padding: 12px 16px calc(12px + env(safe-area-inset-bottom)); z-index: 30; }
+    .actions-inner { max-width: 640px; margin: 0 auto; display: flex; gap: 10px; }
+    .actions-inner .btn { flex: 1; }
+    .actions-inner .btn-secondary { flex: 0 0 auto; min-width: 104px; }
+
+    /* Guide cards */
+    .guide-head { display: flex; justify-content: space-between; gap: 12px; align-items: flex-start; margin-bottom: 14px; }
+    .lang-pill { display: inline-flex; gap: 6px; align-items: center; font-size: 12.5px; font-weight: 600; background: var(--brand-tint); color: var(--brand-dark); border-radius: 99px; padding: 4px 10px; white-space: nowrap; border: 0; cursor: pointer; }
+    .gcard { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); box-shadow: var(--shadow); padding: 16px; margin-top: 12px; }
+    .gcard-head { display: flex; gap: 12px; align-items: center; }
+    .gcard-head h3 { flex: 1; }
+    .amount { font-weight: 700; font-size: 18px; color: var(--brand-dark); background: var(--brand-tint); border-radius: 10px; padding: 4px 10px; white-space: nowrap; }
+    .gcard p, .gcard li { font-size: 14.5px; color: #2B3740; }
+    .gcard p + p { margin-top: 6px; }
+    .gcard ul { margin: 8px 0 0; padding-left: 20px; }
+    .gcard li + li { margin-top: 4px; }
+    .path { display: flex; flex-wrap: wrap; gap: 6px; align-items: center; margin: 10px 0; }
+    .path span { background: var(--bg); border: 1px solid var(--border); border-radius: 8px; padding: 4px 9px; font-size: 13px; font-weight: 600; }
+    .path i { color: var(--faint); font-style: normal; }
+    .example { margin-top: 10px; background: var(--brand-tint-2); border: 1px dashed #B9DDD3; border-radius: 10px; padding: 10px 12px; font-size: 14px; }
+    .calc { margin-top: 12px; display: grid; grid-template-columns: 1fr; gap: 8px; }
+    .calc-out { font-weight: 600; color: var(--brand-dark); font-size: 14.5px; min-height: 22px; }
+    .visit-grid { display: grid; grid-template-columns: 1fr; gap: 10px; margin-top: 10px; }
+    @media (min-width: 480px) { .visit-grid { grid-template-columns: 1fr 1fr; } }
+    .visit-box { border: 1px solid var(--border); border-radius: 12px; padding: 12px; background: var(--brand-tint-2); }
+    .visit-box b { display: block; margin-bottom: 4px; }
+    .avatar { width: 40px; height: 40px; flex: none; border-radius: 50%; background: var(--brand-tint); color: var(--brand-dark); display: grid; place-items: center; font-weight: 700; }
+    /* Support contacts: shown only after a complaint exists. The whole row is a tel: link, so one tap opens the phone dialer. */
+    .call-list { display: grid; gap: 8px; margin-top: 12px; }
+    a.call-row { display: flex; align-items: center; gap: 12px; padding: 12px 14px; min-height: 64px; border: 1px solid var(--border); border-radius: 14px;
+      background: var(--surface); color: var(--text); text-decoration: none; -webkit-tap-highlight-color: transparent; transition: border-color .15s, background .15s; }
+    a.call-row:hover, a.call-row:active { border-color: var(--brand); background: var(--brand-tint-2); }
+    a.call-row:focus-visible { outline: 3px solid var(--brand); outline-offset: 2px; }
+    .call-row .who { flex: 1; min-width: 0; }
+    .call-row .who b { display: block; font-size: 15px; }
+    .call-row .who span { font-size: 14px; color: var(--muted); font-variant-numeric: tabular-nums; letter-spacing: .02em; }
+    .call-row .dial { flex: none; display: inline-flex; align-items: center; gap: 6px; background: #18804F; color: #fff; font-weight: 700; font-size: 14px;
+      padding: 10px 14px; border-radius: 999px; }
+    .call-row .dial svg { width: 16px; height: 16px; }
+
+    /* Page 3 */
+    .summary { display: flex; gap: 12px; align-items: center; background: var(--brand-tint-2); border: 1px solid var(--brand-tint); border-radius: var(--radius); padding: 14px; }
+    .section-title { font-size: 13px; text-transform: uppercase; letter-spacing: .06em; color: var(--muted); font-weight: 700; margin: 22px 0 10px; }
+    .counter { font-size: 12px; color: var(--faint); text-align: right; margin-top: 4px; }
+    .drop { border: 1.5px dashed #BFCACE; border-radius: var(--radius-sm); padding: 16px; text-align: center; background: #fff; cursor: pointer; }
+    .drop:hover { border-color: var(--brand); }
+    .file-chip { display: flex; gap: 10px; align-items: center; padding: 10px 12px; border: 1px solid var(--border); border-radius: var(--radius-sm); background: #fff; }
+    .review-list { margin-top: 6px; }
+    .review-group + .review-group { margin-top: 18px; }
+
+    /* Page 4 */
+    .success-hero { text-align: center; padding: 8px 0 4px; }
+    .success-icon { width: 64px; height: 64px; border-radius: 50%; background: var(--success-tint); color: var(--success); display: grid; place-items: center; margin: 0 auto 12px; }
+    .success-icon .icon { width: 34px; height: 34px; stroke-width: 2.4; }
+    .id-box { display: flex; align-items: center; justify-content: space-between; gap: 10px; border: 1.5px solid var(--brand-tint); background: var(--brand-tint-2); border-radius: 12px; padding: 12px 14px; margin-top: 10px; }
+    .id-box .val { font-family: ui-monospace, 'SF Mono', Menlo, Consolas, monospace; font-size: 18px; font-weight: 700; letter-spacing: .03em; word-break: break-all; }
+    .my-list .item { display: flex; gap: 10px; align-items: center; padding: 12px 0; border-top: 1px solid var(--border); }
+    .my-list .item:first-child { border-top: 0; }
+  </style>
+</head>
+<body>
+  <header class="topbar">
+    <div class="topbar-inner">
+      <div class="logo" aria-hidden="true">UC</div>
+      <div>
+        <div class="brand-name">Partner Help Center</div>
+        <div class="brand-sub">Payments &amp; issue support</div>
+      </div>
+    </div>
+  </header>
+
+  <main class="shell" id="app">
+    <div id="stepperWrap">
+      <div class="step-count" id="stepCount"></div>
+      <div class="stepper" id="stepper" role="list" aria-label="Progress"></div>
+    </div>
+
+    <!-- PAGE 1: Partner details and language -->
+    <section id="page1" data-page="1" aria-labelledby="p1title">
+      <div class="card">
+        <div class="hero">
+          <div class="icon-badge" data-icon="headset"></div>
+          <div>
+            <h1 id="p1title" data-t="welcomeTitle">Welcome to Partner Help Center</h1>
+            <p class="muted mt-4" data-t="welcomeSub">Get payment information and raise an issue in a few simple steps.</p>
+          </div>
+        </div>
+        <form id="form1" novalidate autocomplete="on">
+          <div class="field" id="f-fullName">
+            <label class="label" for="fullName"><span data-t="fullName">Full Name</span><span class="req">*</span></label>
+            <input class="input" id="fullName" name="name" type="text" autocomplete="name" maxlength="80" data-tph="fullNamePh" placeholder="Enter your full name" required>
+            <div class="error" role="alert"></div>
+          </div>
+          <div class="field" id="f-mobile">
+            <label class="label" for="mobile"><span data-t="mobile">Registered Mobile Number</span><span class="req">*</span></label>
+            <div class="input-group">
+              <span class="prefix">+91</span>
+              <input class="input" id="mobile" name="tel" type="tel" inputmode="numeric" autocomplete="tel-national" maxlength="14" placeholder="98765 43210" required>
+            </div>
+            <div class="hint" data-t="mobileHint">10-digit number registered with UC</div>
+            <div class="error" role="alert"></div>
+          </div>
+          <div class="field" id="f-language">
+            <span class="label" id="langLbl"><span data-t="language">Select your language</span><span class="req">*</span></span>
+            <div class="lang-grid" id="langGrid" role="radiogroup" aria-labelledby="langLbl"></div>
+            <div class="error" role="alert"></div>
+          </div>
+          <div class="field hidden" id="otpBlock">
+            <div class="notice"><span data-icon="shield"></span><span data-t="otpRequired">Verify your number with OTP to continue.</span></div>
+            <div class="row mt-12">
+              <button type="button" class="btn btn-secondary" id="otpSendBtn" data-t="otpSend">Send OTP</button>
+              <span class="small muted" id="otpSentMsg"></span>
+            </div>
+            <div class="row mt-12 hidden" id="otpEntry">
+              <input class="input" id="otpCode" inputmode="numeric" maxlength="6" autocomplete="one-time-code" data-tph="otpLabel" placeholder="Enter 6-digit OTP" style="max-width:200px">
+              <button type="button" class="btn btn-primary" id="otpVerifyBtn" data-t="otpVerify">Verify</button>
+            </div>
+            <div class="notice mt-12 hidden" id="otpOk"><span data-icon="check"></span><span data-t="otpVerified">Mobile number verified</span></div>
+          </div>
+        </form>
+        <p class="tiny muted mt-16" data-t="privacy">Your details are used only to handle your support request.</p>
+      </div>
+      <div class="mt-16" style="text-align:center">
+        <button type="button" class="btn btn-ghost" id="openTrack1"><span data-icon="search"></span><span data-t="trackLink">Already raised an issue? Track your complaint</span></button>
+      </div>
+    </section>
+
+    <!-- PAGE 2: Payment rules guide (selected language) -->
+    <section id="page2" data-page="2" class="hidden" aria-labelledby="p2title">
+      <div class="guide-head">
+        <div>
+          <h1 id="p2title" data-t="guideTitle">Payment Rules &amp; Partner Guide</h1>
+          <p class="muted mt-4" data-t="guideSub">A simple explanation of how your payments work.</p>
+        </div>
+        <button type="button" class="lang-pill" id="langPill" title="Change language"></button>
+      </div>
+      <div id="guide"></div>
+    </section>
+
+    <!-- PAGE 3: Escalation form (ALWAYS English) -->
+    <section id="page3" data-page="3" class="hidden" lang="en" aria-labelledby="p3title">
+      <div id="formView">
+        <h1 id="p3title">Raise an Issue</h1>
+        <p class="muted mt-4">Tell us what went wrong. Fields marked <span class="req">*</span> are required.</p>
+
+        <div class="summary mt-16">
+          <div class="avatar" id="sumAvatar">?</div>
+          <div style="flex:1;min-width:0">
+            <div class="tiny muted">Partner details (from step 1)</div>
+            <div style="font-weight:600" id="sumName"></div>
+            <div class="small muted" id="sumMobile"></div>
+          </div>
+          <button type="button" class="btn btn-ghost btn-sm" id="editDetails">Edit</button>
+        </div>
+
+        <form id="form3" novalidate class="card mt-16">
+          <div class="grid-2" style="margin-top:-16px">
+            <div class="field">
+              <label class="label" for="roName">Full Name</label>
+              <input class="input" id="roName" readonly tabindex="-1">
+            </div>
+            <div class="field">
+              <label class="label" for="roMobile">Registered Mobile Number</label>
+              <input class="input" id="roMobile" readonly tabindex="-1">
+            </div>
+          </div>
+
+          <div class="section-title">Issue details</div>
+          <div class="field" id="f-category">
+            <label class="label" for="category">Issue Category<span class="req">*</span></label>
+            <select class="input" id="category" required><option value="">Select a category</option></select>
+            <div class="error" role="alert"></div>
+          </div>
+          <div class="field hidden" id="f-subcategory">
+            <label class="label" for="subcategory">Subcategory<span class="req">*</span></label>
+            <select class="input" id="subcategory" required><option value="">Select a subcategory</option></select>
+            <div class="error" role="alert"></div>
+          </div>
+
+          <div id="condFields" class="hidden">
+            <div class="section-title">Job details <span style="text-transform:none;letter-spacing:0;font-weight:500">(optional, if available)</span></div>
+            <div class="grid-2" style="margin-top:-16px">
+              <div class="field hidden" id="f-customerMobile" data-cond="customerMobile">
+                <label class="label" for="customerMobile">Customer Mobile Number</label>
+                <input class="input" id="customerMobile" type="tel" inputmode="numeric" maxlength="14" placeholder="10-digit number">
+                <div class="error" role="alert"></div>
+              </div>
+              <div class="field hidden" id="f-jobDate" data-cond="jobDate">
+                <label class="label" for="jobDate">Job Date</label>
+                <input class="input" id="jobDate" type="date">
+                <div class="error" role="alert"></div>
+              </div>
+              <div class="field hidden" id="f-jobReference" data-cond="jobReference">
+                <label class="label" for="jobReference">Job / Booking Reference</label>
+                <input class="input" id="jobReference" maxlength="60" placeholder="If available">
+                <div class="hint">Not required. Leave blank if you do not have it.</div>
+                <div class="error" role="alert"></div>
+              </div>
+              <div class="field hidden" id="f-expectedAmount" data-cond="expectedAmount">
+                <label class="label" for="expectedAmount">Expected Amount (₹)</label>
+                <input class="input" id="expectedAmount" inputmode="decimal" maxlength="12" placeholder="e.g. 300">
+                <div class="error" role="alert"></div>
+              </div>
+              <div class="field hidden" id="f-receivedAmount" data-cond="receivedAmount">
+                <label class="label" for="receivedAmount">Received / Deducted Amount (₹)</label>
+                <input class="input" id="receivedAmount" inputmode="decimal" maxlength="12" placeholder="e.g. 0">
+                <div class="error" role="alert"></div>
+              </div>
+            </div>
+          </div>
+
+          <div class="field" id="f-description">
+            <label class="label" for="description">Detailed Issue Description<span class="req">*</span></label>
+            <textarea class="input" id="description" maxlength="2000" placeholder="What happened? Include dates, amounts and anything that helps us check quickly."></textarea>
+            <div class="row"><div class="error" role="alert" style="flex:1"></div><div class="counter spacer" id="descCount">0 / 2000</div></div>
+          </div>
+
+          <div class="field" id="f-file">
+            <span class="label">Supporting Proof <span class="muted" style="font-weight:500">(optional)</span></span>
+            <input type="file" id="file" class="sr-only" accept=".jpg,.jpeg,.png,.pdf,image/jpeg,image/png,application/pdf">
+            <label for="file" class="drop" id="dropZone">
+              <span data-icon="upload" style="color:var(--brand)"></span>
+              <div style="font-weight:600;margin-top:4px">Tap to upload a screenshot or document</div>
+              <div class="hint">JPG, PNG or PDF · up to 10 MB</div>
+            </label>
+            <div class="file-chip hidden" id="fileChip">
+              <span data-icon="file" style="color:var(--brand)"></span>
+              <div style="flex:1;min-width:0"><div id="fileName" style="font-weight:600;overflow:hidden;text-overflow:ellipsis;white-space:nowrap"></div><div class="tiny muted" id="fileSize"></div></div>
+              <button type="button" class="btn btn-ghost btn-sm" id="fileRemove">Remove</button>
+            </div>
+            <div class="error" role="alert"></div>
+          </div>
+
+          <div class="field" id="f-confirm">
+            <label class="check"><input type="checkbox" id="confirm"><span>I confirm that the information provided is correct.</span></label>
+            <div class="error" role="alert"></div>
+          </div>
+        </form>
+      </div>
+
+      <div id="reviewView" class="hidden">
+        <h1>Review Your Complaint</h1>
+        <p class="muted mt-4">Check the details below. Tap Edit to change anything before you submit.</p>
+        <div class="card mt-16">
+          <div id="reviewBody" class="review-list"></div>
+        </div>
+        <div class="notice mt-12"><span data-icon="info"></span><span>After you submit, you will get a complaint ID and a private tracking key. Keep both safe to check your complaint status.</span></div>
+      </div>
+    </section>
+
+    <!-- PAGE 4: Confirmation and tracking (English) -->
+    <section id="page4" data-page="4" class="hidden" lang="en">
+      <div class="card">
+        <div class="success-hero">
+          <div class="success-icon"><span data-icon="check"></span></div>
+          <h1>Complaint submitted</h1>
+          <p class="muted mt-4">Thank you. Our support team will review your issue.</p>
+        </div>
+        <div class="mt-16">
+          <div class="tiny muted">Complaint ID</div>
+          <div class="id-box"><span class="val" id="cId"></span><button type="button" class="btn btn-secondary btn-sm" data-copy="cId">Copy</button></div>
+          <div class="tiny muted mt-12">Private tracking key</div>
+          <div class="id-box"><span class="val" id="cKey"></span><button type="button" class="btn btn-secondary btn-sm" data-copy="cKey">Copy</button></div>
+          <div class="notice warn mt-8"><span data-icon="lock"></span><span>Save this tracking key (take a screenshot). You need it with your mobile number to see your complaint. Never share it. We have also saved it on this device.</span></div>
+        </div>
+        <dl class="dl mt-16">
+          <dt>Category</dt><dd id="cCat"></dd>
+          <dt>Submitted on</dt><dd id="cDate"></dd>
+          <dt>Current status</dt><dd id="cStatus"></dd>
+        </dl>
+        <div id="cAuto"></div>
+      </div>
+      <div id="cSupport"></div>
+    </section>
+
+    <!-- TRACKING (English) -->
+    <section id="track" class="hidden" lang="en" aria-labelledby="trTitle">
+      <div class="row" style="margin-bottom:12px">
+        <button type="button" class="btn btn-ghost btn-sm" id="trackBack" style="padding-left:0"><span data-icon="left"></span>Back</button>
+      </div>
+      <h1 id="trTitle">Track Your Complaint</h1>
+      <p class="muted mt-4">For your privacy, enter your complaint ID, registered mobile number and the tracking key you received after submitting.</p>
+
+      <div class="card mt-16 hidden" id="myListCard">
+        <h3>Saved on this device</h3>
+        <div class="my-list mt-8" id="myList"></div>
+      </div>
+
+      <form class="card mt-16" id="trackForm" novalidate>
+        <div class="field" id="f-tId">
+          <label class="label" for="tId">Complaint ID<span class="req">*</span></label>
+          <input class="input" id="tId" placeholder="UC-2026-00001" autocapitalize="characters" maxlength="20">
+          <div class="error" role="alert"></div>
+        </div>
+        <div class="field" id="f-tMobile">
+          <label class="label" for="tMobile">Registered Mobile Number<span class="req">*</span></label>
+          <div class="input-group"><span class="prefix">+91</span><input class="input" id="tMobile" type="tel" inputmode="numeric" maxlength="14"></div>
+          <div class="error" role="alert"></div>
+        </div>
+        <div class="field" id="f-tKey">
+          <label class="label" for="tKey">Tracking Key<span class="req">*</span></label>
+          <input class="input" id="tKey" placeholder="XXXX-XXXX-XXXX" autocapitalize="characters" maxlength="16" autocomplete="off">
+          <div class="error" role="alert"></div>
+        </div>
+        <button type="submit" class="btn btn-primary btn-block mt-16" id="trackBtn"><span data-icon="search"></span>Track Complaint</button>
+        <p class="tiny muted mt-12">Lost your tracking key? Open this page on the phone you submitted from: it is listed under "Saved on this device". Support numbers are shown on your complaint confirmation and here once your complaint is found.</p>
+      </form>
+
+      <div id="otpTrack" class="card mt-16 hidden">
+        <h3>Or verify with OTP</h3>
+        <p class="small muted mt-4">See all complaints for your verified mobile number.</p>
+        <button type="button" class="btn btn-secondary mt-12" id="otpListBtn">Show my complaints</button>
+      </div>
+
+      <div id="trackResult" class="mt-16"></div>
+    </section>
+  </main>
+
+  <div class="actions" id="actions">
+    <div class="actions-inner">
+      <button type="button" class="btn btn-secondary" id="backBtn"><span data-icon="left"></span><span id="backLbl">Back</span></button>
+      <button type="button" class="btn btn-primary" id="nextBtn"><span id="nextLbl">Next</span><span data-icon="right"></span></button>
+    </div>
+  </div>
+
+  <div class="overlay hidden" id="overlay" role="status" aria-live="polite"><div class="overlay-box"><span class="spinner"></span><span id="overlayMsg">Please wait…</span></div></div>
+  <div class="toasts" id="toasts" aria-live="assertive"></div>
+
+  <script>window.API_URL = "https://script.google.com/macros/s/AKfycbweI2MAIp_Q2P3cBStN1N-aZGJztEyEbiDE_89jbrmSJjteTZ2nw6fop2p8L3Yk_3LY/exec"; window.BOOT = {"languages":[{"code":"hinglish","label":"Hinglish","native":"Hinglish"},{"code":"hi","label":"Hindi","native":"हिन्दी"},{"code":"en","label":"English","native":"English"},{"code":"ta","label":"Tamil","native":"தமிழ்"},{"code":"te","label":"Telugu","native":"తెలుగు"},{"code":"kn","label":"Kannada","native":"ಕನ್ನಡ"},{"code":"ml","label":"Malayalam","native":"മലയാളം"}],"categories":[{"name":"Payment \u0026 Payout","icon":"wallet","fields":[],"subFields":{"Visit Charge Missing":["customerMobile","jobDate","expectedAmount","receivedAmount"],"On-Time Incentive Missing":["customerMobile","jobDate","expectedAmount","receivedAmount"],"Rating Incentive Missing":["customerMobile","jobDate","expectedAmount","receivedAmount"],"Extra Mile Payment Missing":["customerMobile","jobDate","expectedAmount","receivedAmount"],"Payment Amount Mismatch":["customerMobile","jobDate","expectedAmount","receivedAmount"],"Payout Delayed":["expectedAmount","receivedAmount"],"TDS Deduction Issue":["expectedAmount","receivedAmount"],"Incorrect Deduction":["expectedAmount","receivedAmount"],"Spare Parts Payment Missing":["customerMobile","jobDate","expectedAmount","receivedAmount"],"Smart Wallet Amount Issue":["expectedAmount","receivedAmount"],"Refresher Kit Deduction Issue":["expectedAmount","receivedAmount"],"Refresher Kit Refund Pending":["expectedAmount","receivedAmount"],"Installed Spare Payment Missing":["customerMobile","jobDate","expectedAmount","receivedAmount"],"Revisit Payment Issue":["customerMobile","jobDate","expectedAmount","receivedAmount"],"Other Payment Issue":["customerMobile","jobDate","expectedAmount","receivedAmount"]},"subs":["Visit Charge Missing","On-Time Incentive Missing","Rating Incentive Missing","Extra Mile Payment Missing","Payment Amount Mismatch","Payout Delayed","TDS Deduction Issue","Incorrect Deduction","Spare Parts Payment Missing","Smart Wallet Amount Issue","Refresher Kit Deduction Issue","Refresher Kit Refund Pending","Installed Spare Payment Missing","Revisit Payment Issue","Other Payment Issue"]},{"name":"Job / Booking Issues","icon":"briefcase","fields":["customerMobile","jobDate","jobReference"],"subs":["Job Not Visible","Job Accept Issue","Job Assignment Issue","Job Reschedule Issue","Job Cancellation Issue","Customer Unavailable","Job Closure / OTP Issue","Revisit Booking Issue","Incorrect Job Details","Job Status Not Updated","Other Job / Booking Issue"]},{"name":"Distance / Extra Mile","icon":"route","fields":["customerMobile","jobDate","jobReference"],"subs":["Incorrect Distance Displayed","Distance Calculation Incorrect","Wrong Route / Distance Considered","Eligible Distance Not Considered","Distance Above 20 KM Not Calculated Correctly","Other Distance Issue"]},{"name":"Onboarding \u0026 Profile","icon":"user","fields":[],"subs":["Onboarding Pending","Bank Details / Name Mismatch","Address Verification Issue","Document Approval Pending","Profile Activation Issue","Service Category Mapping Issue","Registered Mobile Number Update","Other Onboarding / Profile Issue"]},{"name":"App Issues","icon":"phone","fields":[],"subFields":{"Job Not Showing in App":["customerMobile","jobDate","jobReference"],"Unable to Accept Job":["customerMobile","jobDate","jobReference"],"Customer Details Not Visible":["customerMobile","jobDate","jobReference"],"Job Details Incorrect in App":["customerMobile","jobDate","jobReference"],"App Shows Incorrect Job Status":["customerMobile","jobDate","jobReference"],"Unable to Start Job":["customerMobile","jobDate","jobReference"],"Unable to Complete / Close Job":["customerMobile","jobDate","jobReference"],"Job-End OTP Issue":["customerMobile","jobDate","jobReference"],"Spare Parts Not Showing in App":["customerMobile","jobDate","jobReference"],"Unable to Order Spare Parts":["customerMobile","jobDate","jobReference"]},"subs":["Unable to Login","OTP Not Received","Job Not Showing in App","Unable to Accept Job","Customer Details Not Visible","Job Details Incorrect in App","App Shows Incorrect Job Status","Unable to Start Job","Unable to Complete / Close Job","Job-End OTP Issue","Spare Parts Not Showing in App","Unable to Order Spare Parts","Smart Wallet Not Updating in App","Profile Details Not Updating","App Notification Not Received","App Error Message","App Loading / Performance Issue","Other App Issue"]},{"name":"Customer / Service Issues","icon":"users","fields":["customerMobile","jobDate","jobReference"],"subFields":{"Customer Payment Dispute":["expectedAmount","receivedAmount"]},"subs":["Customer Complaint","Rating Dispute","Service Quality Concern","Service Procedure Dispute","Customer Payment Dispute","Revisit Concern","Other Customer / Service Issue"]},{"name":"Training / Quality / Policy","icon":"book","fields":[],"subs":["Training Request","Refresher Training Request","Technical Guidance","Quality Audit / QA Issue","Policy Clarification","Service Procedure Query","Other Training / Quality Issue"]},{"name":"Other Issue","icon":"help","fields":[],"subs":["Other"]}],"statuses":["New","Assigned","In Progress","Waiting for Partner","Resolved","Reopened","Rejected"],"policy":{"VISIT_CHARGE":300,"ONTIME_INCENTIVE":300,"RATING_INCENTIVE":150,"EXTRA_MILE_THRESHOLD_KM":20,"EXTRA_MILE_RATE_PER_KM":4,"PAYOUT_DAYS":["MON","WED","FRI"],"SPARE_INSTALL_BONUS_PERCENT":12,"REFRESHER_KIT_AMOUNT":2680,"TDS_PERCENT":10,"SLA_HOURS":72,"AUTO_CLOSE_DAYS":7},"otpEnabled":false,"maxFileBytes":10485760,"allowedMime":["image/jpeg","image/png","application/pdf"],"tz":"Asia/Kolkata"};</script>
+  <script>
+/* Common.html — helpers shared by the partner portal and the admin dashboard. */
+(function (w) {
+  var ICONS = {
+    zap: '<polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/>',
+    headset: '<path d="M3 18v-6a9 9 0 0 1 18 0v6"/><path d="M21 19a2 2 0 0 1-2 2h-1a2 2 0 0 1-2-2v-3a2 2 0 0 1 2-2h3zM3 19a2 2 0 0 0 2 2h1a2 2 0 0 0 2-2v-3a2 2 0 0 0-2-2H3z"/>',
+    check: '<polyline points="20 6 9 17 4 12"/>',
+    shield: '<path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>',
+    search: '<circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/>',
+    left: '<polyline points="15 18 9 12 15 6"/>',
+    right: '<polyline points="9 18 15 12 9 6"/>',
+    upload: '<path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/>',
+    download: '<path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/>',
+    file: '<path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/>',
+    info: '<circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/>',
+    alert: '<circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/>',
+    lock: '<rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/>',
+    wallet: '<rect x="2" y="6" width="20" height="14" rx="2"/><path d="M2 10h20"/><path d="M16 15h2"/>',
+    clock: '<circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/>',
+    star: '<polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/>',
+    route: '<circle cx="6" cy="19" r="3"/><path d="M9 19h8.5a3.5 3.5 0 0 0 0-7h-11a3.5 3.5 0 0 1 0-7H15"/><circle cx="18" cy="5" r="3"/>',
+    calendar: '<rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/>',
+    repeat: '<polyline points="17 1 21 5 17 9"/><path d="M3 11V9a4 4 0 0 1 4-4h14"/><polyline points="7 23 3 19 7 15"/><path d="M21 13v2a4 4 0 0 1-4 4H3"/>',
+    tool: '<path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"/>',
+    box: '<path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/><polyline points="3.27 6.96 12 12.01 20.73 6.96"/><line x1="12" y1="22.08" x2="12" y2="12"/>',
+    percent: '<line x1="19" y1="5" x2="5" y2="19"/><circle cx="6.5" cy="6.5" r="2.5"/><circle cx="17.5" cy="17.5" r="2.5"/>',
+    phone: '<path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72c.13.96.36 1.9.7 2.81a2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.91.34 1.85.57 2.81.7A2 2 0 0 1 22 16.92z"/>',
+    briefcase: '<rect x="2" y="7" width="20" height="14" rx="2"/><path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"/>',
+    user: '<path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/>',
+    users: '<path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/>',
+    book: '<path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/>',
+    help: '<circle cx="12" cy="12" r="10"/><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"/><line x1="12" y1="17" x2="12.01" y2="17"/>',
+    globe: '<circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/>',
+    edit: '<path d="M12 20h9"/><path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"/>',
+    plus: '<line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/>',
+    x: '<line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/>',
+    refresh: '<polyline points="23 4 23 10 17 10"/><path d="M20.49 15a9 9 0 1 1-2.12-9.36L23 10"/>',
+    grid: '<rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/>',
+    list: '<line x1="8" y1="6" x2="21" y2="6"/><line x1="8" y1="12" x2="21" y2="12"/><line x1="8" y1="18" x2="21" y2="18"/><line x1="3" y1="6" x2="3.01" y2="6"/><line x1="3" y1="12" x2="3.01" y2="12"/><line x1="3" y1="18" x2="3.01" y2="18"/>',
+    bar: '<line x1="12" y1="20" x2="12" y2="10"/><line x1="18" y1="20" x2="18" y2="4"/><line x1="6" y1="20" x2="6" y2="16"/>',
+    sliders: '<line x1="4" y1="21" x2="4" y2="14"/><line x1="4" y1="10" x2="4" y2="3"/><line x1="12" y1="21" x2="12" y2="12"/><line x1="12" y1="8" x2="12" y2="3"/><line x1="20" y1="21" x2="20" y2="16"/><line x1="20" y1="12" x2="20" y2="3"/><line x1="1" y1="14" x2="7" y2="14"/><line x1="9" y1="8" x2="15" y2="8"/><line x1="17" y1="16" x2="23" y2="16"/>',
+    activity: '<polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/>',
+    send: '<line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/>',
+    external: '<path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/>',
+    inbox: '<polyline points="22 12 16 12 14 15 10 15 8 12 2 12"/><path d="M5.45 5.11L2 12v6a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2v-6l-3.45-6.89A2 2 0 0 0 16.76 4H7.24a2 2 0 0 0-1.79 1.11z"/>'
+  };
+
+  function icon(name, cls) {
+    return '<svg class="icon ' + (cls || '') + '" viewBox="0 0 24 24" aria-hidden="true">' + (ICONS[name] || ICONS.info) + '</svg>';
+  }
+  function hydrateIcons(root) {
+    (root || document).querySelectorAll('[data-icon]').forEach(function (el) {
+      if (el.getAttribute('data-icon-done')) return;
+      el.innerHTML = icon(el.getAttribute('data-icon'), el.getAttribute('data-icon-class') || '');
+      el.setAttribute('data-icon-done', '1');
+      if (!el.style.display) el.style.display = 'inline-flex';
+    });
+  }
+  function esc(s) {
+    return String(s === null || s === undefined ? '' : s).replace(/[&<>"']/g, function (c) {
+      return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c];
+    });
+  }
+  /** Promise wrapper around google.script.run. */
+  function run(fn) {
+    var args = Array.prototype.slice.call(arguments, 1);
+    return new Promise(function (resolve, reject) {
+      if (w.API_URL) { apiCall(fn, args).then(resolve, reject); return; }
+      if (!w.google || !google.script || !google.script.run) { reject(new Error('Not connected to the server. Please reload the page.')); return; }
+      var r = google.script.run.withSuccessHandler(resolve).withFailureHandler(function (err) {
+        var msg = (err && err.message) ? err.message : String(err || 'Request failed');
+        msg = msg.replace(/^(Exception|Error|UserError):\s*/i, '');
+        if (/NetworkError|Failed to fetch|timed? ?out/i.test(msg)) msg = 'Network problem. Check your internet connection and try again.';
+        reject(new Error(msg));
+      });
+      r[fn].apply(r, args);
+    });
+  }
+  /**
+   * Hosted pages (outside script.google.com) call the Apps Script JSON API instead of google.script.run.
+   * No Google cookies are sent, so several signed-in Google accounts cannot break the page.
+   */
+  var ADMIN_SESSION_KEY = 'phc_admin_session';
+  function adminSession(v) {
+    try {
+      if (v === undefined) return w.localStorage.getItem(ADMIN_SESSION_KEY) || '';
+      if (v) w.localStorage.setItem(ADMIN_SESSION_KEY, v); else w.localStorage.removeItem(ADMIN_SESSION_KEY);
+    } catch (e) { /* storage blocked */ }
+    return v || '';
+  }
+  function apiCall(fn, args) {
+    return fetch(w.API_URL, {
+      method: 'POST', credentials: 'omit', redirect: 'follow',
+      body: JSON.stringify({ fn: fn, args: args, session: adminSession() })
+    }).then(function (r) { return r.json(); }, function () {
+      throw new Error('Network problem. Check your internet connection and try again.');
+    }).then(function (res) {
+      if (res && res.ok) return res.result === undefined ? null : res.result;
+      throw new Error(String((res && res.error) || 'Request failed').replace(/^(Exception|Error|UserError):\s*/i, ''));
+    });
+  }
+  function toast(msg, type, ms) {
+    var box = document.getElementById('toasts');
+    if (!box) return;
+    var t = document.createElement('div');
+    t.className = 'toast ' + (type || '');
+    t.innerHTML = icon(type === 'error' ? 'alert' : type === 'success' ? 'check' : 'info') + '<span>' + esc(msg) + '</span>';
+    box.appendChild(t);
+    setTimeout(function () { t.remove(); }, ms || (type === 'error' ? 6000 : 3500));
+  }
+  var loadingCount = 0;
+  function showLoading(msg) {
+    loadingCount++;
+    var o = document.getElementById('overlay');
+    if (!o) return;
+    document.getElementById('overlayMsg').textContent = msg || 'Please wait…';
+    o.classList.remove('hidden');
+  }
+  function hideLoading() {
+    loadingCount = Math.max(0, loadingCount - 1);
+    if (!loadingCount) { var o = document.getElementById('overlay'); if (o) o.classList.add('hidden'); }
+  }
+  function fmtDateTime(iso, tz) {
+    if (!iso) return '—';
+    var d = new Date(iso);
+    if (isNaN(d)) return String(iso);
+    try {
+      return new Intl.DateTimeFormat('en-IN', { timeZone: tz || 'Asia/Kolkata', day: '2-digit', month: 'short', year: 'numeric', hour: '2-digit', minute: '2-digit' }).format(d);
+    } catch (e) { return d.toLocaleString(); }
+  }
+  function fmtDate(iso, tz) {
+    if (!iso) return '—';
+    var d = /^\d{4}-\d{2}-\d{2}$/.test(iso) ? new Date(iso + 'T12:00:00Z') : new Date(iso);
+    if (isNaN(d)) return String(iso);
+    try { return new Intl.DateTimeFormat('en-IN', { timeZone: tz || 'Asia/Kolkata', day: '2-digit', month: 'short', year: 'numeric' }).format(d); }
+    catch (e) { return d.toDateString(); }
+  }
+  function statusClass(s) { return 'st-' + String(s || '').toLowerCase().replace(/[^a-z]+/g, '-'); }
+  function statusBadge(s) { return '<span class="badge ' + statusClass(s) + '">' + esc(s) + '</span>'; }
+  function money(n) {
+    if (n === '' || n === null || n === undefined || isNaN(Number(n))) return '—';
+    return '₹' + Number(n).toLocaleString('en-IN', { maximumFractionDigits: 2 });
+  }
+  function uuid() {
+    if (w.crypto && crypto.randomUUID) return crypto.randomUUID();
+    var a = new Uint8Array(16); (w.crypto || w.msCrypto).getRandomValues(a);
+    return Array.prototype.map.call(a, function (b) { return ('0' + b.toString(16)).slice(-2); }).join('').replace(/^(.{8})(.{4})(.{4})(.{4})/, '$1-$2-$3-$4-');
+  }
+  function copyText(text) {
+    function fallback() {
+      var ta = document.createElement('textarea');
+      ta.value = text; ta.setAttribute('readonly', ''); ta.style.position = 'fixed'; ta.style.opacity = '0';
+      document.body.appendChild(ta); ta.select();
+      var ok = false; try { ok = document.execCommand('copy'); } catch (e) { ok = false; }
+      ta.remove();
+      return ok;
+    }
+    if (navigator.clipboard && navigator.clipboard.writeText) {
+      return navigator.clipboard.writeText(text).then(function () { return true; }, function () { return fallback(); });
+    }
+    return Promise.resolve(fallback());
+  }
+  function store(kind) {
+    return {
+      get: function (k, d) { try { var v = w[kind].getItem(k); return v ? JSON.parse(v) : d; } catch (e) { return d; } },
+      set: function (k, v) { try { w[kind].setItem(k, JSON.stringify(v)); } catch (e) { /* storage blocked */ } },
+      remove: function (k) { try { w[kind].removeItem(k); } catch (e) { /* ignore */ } }
+    };
+  }
+  function downloadText(filename, text, mime) {
+    var blob = new Blob(['﻿' + text], { type: (mime || 'text/csv') + ';charset=utf-8' });
+    var a = document.createElement('a');
+    a.href = URL.createObjectURL(blob);
+    a.download = filename;
+    document.body.appendChild(a); a.click();
+    setTimeout(function () { URL.revokeObjectURL(a.href); a.remove(); }, 2000);
+  }
+
+  w.UI = { ICONS: ICONS, icon: icon, hydrateIcons: hydrateIcons, esc: esc, run: run, toast: toast, showLoading: showLoading, hideLoading: hideLoading,
+    fmtDateTime: fmtDateTime, fmtDate: fmtDate, statusBadge: statusBadge, statusClass: statusClass, money: money, uuid: uuid,
+    copyText: copyText, local: store('localStorage'), session: store('sessionStorage'), downloadText: downloadText, adminSession: adminSession };
+})(window);
+</script>
+
+  <script>
+/**
+ * I18n.html — translations for Page 1 and Page 2 of the partner portal (Pages 3 and 4 are English only).
+ *
+ * Rules for editors:
+ *  - Amounts, percentages, distances, days and phone numbers are NEVER typed here. They are placeholders
+ *    ({visit}, {ontime}, {rating}, {km}, {rate}, {spare}, {kit}, {tds}, {days}, {exKm}, {exEl}, {exAmt})
+ *    filled from the admin-editable PolicyConfig sheet, so every language always shows the same numbers.
+ *  - App screen names (Customer App → Account → My Bookings → Rating, UC Partner App, Smart Wallet) stay in
+ *    English because that is how they appear in the apps.
+ *  - If a translation is missing or uncertain, delete that key: the English text is shown instead
+ *    (see t() in JavaScript.html), which is safer than an incorrect payment rule.
+ *  - Translations should be reviewed by a native speaker before launch.
+ */
+window.I18N = {
+  en: {
+    steps: ['Your details', 'Payment guide', 'Raise issue', 'Confirmation'],
+    welcomeTitle: 'Welcome to Partner Help Center',
+    welcomeSub: 'Get payment information and raise an issue in a few simple steps.',
+    fullName: 'Full Name', fullNamePh: 'Enter your full name',
+    mobile: 'Registered Mobile Number', mobileHint: '10-digit number registered with UC',
+    language: 'Select your language', langLabel: 'Language',
+    next: 'Next', back: 'Back', checking: 'Checking…',
+    errName: 'Please enter your full name.',
+    errMobile: 'Enter a valid 10-digit mobile number starting with 6, 7, 8 or 9.',
+    errLang: 'Please select a language.',
+    trackLink: 'Already raised an issue? Track your complaint',
+    privacy: 'Your details are used only to handle your support request.',
+    otpSend: 'Send OTP', otpLabel: 'Enter 6-digit OTP', otpVerify: 'Verify', otpSent: 'Code sent to {m}',
+    otpVerified: 'Mobile number verified', otpRequired: 'Verify your number with OTP to continue.',
+    guideTitle: 'Payment Rules & Partner Guide',
+    guideSub: 'A simple explanation of how your payments work.',
+    visitTitle: 'Visit Charge',
+    visitBody: 'Visit Charge amount: ₹{visit}. See the Revisit rules below for when it applies.',
+    ontimeTitle: 'On-Time Incentive',
+    ontimeBody: 'Incentive for reaching the job on time: ₹{ontime}.',
+    ratingTitle: 'Rating Incentive',
+    ratingBody: '₹{rating} — applicable only to Installation jobs.',
+    ratingHowTitle: 'How the customer gives a rating',
+    ratingAsk: 'After the job is done, politely ask the customer to rate the service in the app and show them the steps above. Ask only for a genuine rating — never pressure the customer or ask for a fake rating.',
+    extraTitle: 'Extra Mile Payment',
+    extraBody: 'If your total round-trip distance is more than {km} km, you get ₹{rate} for every eligible km above {km} km.',
+    extraNote: 'The rate applies only to the distance above {km} km, not to the whole distance.',
+    extraExample: 'Example: round trip {exKm} km → eligible distance {exEl} km ({exKm} − {km}) → {exEl} × ₹{rate} = ₹{exAmt}.',
+    calcTitle: 'Check your trip', calcLabel: 'Total round-trip distance (km)',
+    calcResult: 'Eligible km: {el} · Extra Mile: ₹{amt}',
+    calcNone: 'Distance up to {km} km is not eligible for Extra Mile.',
+    payoutTitle: 'Payout Schedule',
+    payoutBody: 'Payouts are processed on: {days}.',
+    payoutFirst: 'First payout: Visit Charge.',
+    payoutNext: 'Next payout: Incentive / Rating Incentive and Extra Mile, as applicable.',
+    payoutNote: 'This is the payout processing schedule. The exact time the money reaches your bank account may vary.',
+    revisitTitle: 'Revisit Payment Rules',
+    revisitFirstLabel: 'First visit',
+    revisitFirst: 'Incentive + Extra Mile (if eligible). No Visit Charge.',
+    revisitSecondLabel: 'Second visit',
+    revisitSecond: 'Visit Charge + On-Time Incentive + Extra Mile (if eligible).',
+    spareTitle: 'Spare Parts',
+    spare1: 'Order and install spare parts only through the UC Partner App workflow.',
+    spare2: 'The actual spare amount is reflected in your Smart Wallet as per the applicable process.',
+    spare3: 'Installed spares get an additional {spare}% payment as per policy.',
+    kitTitle: 'Refresher Kit',
+    kit1: 'Kit amount: ₹{kit}.',
+    kit2: 'This amount may be deducted from your payout in advance.',
+    kit3: 'The refund is processed after the relevant job is delivered, as per policy.',
+    kit4: 'If the amount was deducted before a job was assigned, the refund is still processed after delivery, as stated in the policy.',
+    tdsTitle: 'TDS',
+    tds1: '{tds}% TDS is deducted on incentives.',
+    tds2: 'Actual deductions depend on applicable tax rules. Check your payout statement for exact amounts.',
+    supportTitle: 'Support Contacts', supportSub: 'Tap a number to call.', call: 'Call',
+    noteTitle: 'Please note',
+    disclaimer: 'This guide shows the currently configured payment policy. Policies can change. For any doubt, contact the support team.',
+    nextHint: 'Next step: raise your issue (the form is in English).',
+    days: { MON: 'Monday', TUE: 'Tuesday', WED: 'Wednesday', THU: 'Thursday', FRI: 'Friday', SAT: 'Saturday', SUN: 'Sunday' }
+  },
+
+  hinglish: {
+    steps: ['Aapki details', 'Payment guide', 'Problem darj karein', 'Confirmation'],
+    welcomeTitle: 'Partner Help Center mein aapka swagat hai',
+    welcomeSub: 'Payment ki jaankari paayein aur kuch aasaan steps mein apni problem darj karein.',
+    fullName: 'Poora Naam', fullNamePh: 'Apna poora naam likhein',
+    mobile: 'Registered Mobile Number', mobileHint: 'UC ke saath registered 10 digit ka number',
+    language: 'Apni bhasha chunein', langLabel: 'Bhasha',
+    next: 'Aage', back: 'Peeche', checking: 'Check ho raha hai…',
+    errName: 'Kripya apna poora naam likhein.',
+    errMobile: '6, 7, 8 ya 9 se shuru hone wala sahi 10 digit ka mobile number likhein.',
+    errLang: 'Kripya ek bhasha chunein.',
+    trackLink: 'Pehle se complaint ki hai? Apni complaint track karein',
+    privacy: 'Aapki jaankari sirf aapki help request ke liye use hoti hai.',
+    otpSend: 'OTP bhejein', otpLabel: '6 digit ka OTP likhein', otpVerify: 'Verify karein', otpSent: 'Code {m} par bheja gaya',
+    otpVerified: 'Mobile number verify ho gaya', otpRequired: 'Aage badhne ke liye OTP se apna number verify karein.',
+    guideTitle: 'Payment Rules aur Partner Guide',
+    guideSub: 'Aapki payment kaise hoti hai, iski aasaan jaankari.',
+    visitTitle: 'Visit Charge',
+    visitBody: 'Visit Charge ki amount: ₹{visit}. Yeh kab milta hai, iske liye neeche Revisit rules dekhein.',
+    ontimeTitle: 'On-Time Incentive',
+    ontimeBody: 'Time par job par pahunchne ka incentive: ₹{ontime}.',
+    ratingTitle: 'Rating Incentive',
+    ratingBody: '₹{rating} — sirf Installation jobs par laagu.',
+    ratingHowTitle: 'Customer rating kaise de',
+    ratingAsk: 'Job poora hone ke baad customer se politely app mein service ko rating dene ke liye kahein aur upar ke steps dikhayein. Sirf sachchi rating maangein — customer par pressure na daalein aur fake rating na maangein.',
+    extraTitle: 'Extra Mile Payment',
+    extraBody: 'Agar aapki total aane-jaane ki doori {km} km se zyada hai, to {km} km ke upar har eligible km ke liye ₹{rate} milte hain.',
+    extraNote: 'Yeh rate sirf {km} km se upar ki doori par laagu hota hai, poori doori par nahi.',
+    extraExample: 'Example: aane-jaane ki doori {exKm} km → eligible doori {exEl} km ({exKm} − {km}) → {exEl} × ₹{rate} = ₹{exAmt}.',
+    calcTitle: 'Apni doori check karein', calcLabel: 'Aane-jaane ki total doori (km)',
+    calcResult: 'Eligible km: {el} · Extra Mile: ₹{amt}',
+    calcNone: '{km} km tak ki doori Extra Mile ke liye eligible nahi hai.',
+    payoutTitle: 'Payout Schedule',
+    payoutBody: 'Payout in dino mein process hote hain: {days}.',
+    payoutFirst: 'Pehla payout: Visit Charge.',
+    payoutNext: 'Agla payout: Incentive / Rating Incentive aur Extra Mile, jo laagu ho.',
+    payoutNote: 'Yeh payout process hone ka schedule hai. Bank account mein paisa aane ka exact time alag ho sakta hai.',
+    revisitTitle: 'Revisit Payment Rules',
+    revisitFirstLabel: 'Pehli visit',
+    revisitFirst: 'Incentive + Extra Mile (agar eligible ho). Visit Charge nahi milta.',
+    revisitSecondLabel: 'Doosri visit',
+    revisitSecond: 'Visit Charge + On-Time Incentive + Extra Mile (agar eligible ho).',
+    spareTitle: 'Spare Parts',
+    spare1: 'Spare parts sirf UC Partner App ke process se hi order aur install karein.',
+    spare2: 'Spare ki actual amount laagu process ke hisaab se aapke Smart Wallet mein dikhegi.',
+    spare3: 'Install kiye gaye spare par policy ke hisaab se {spare}% extra payment milta hai.',
+    kitTitle: 'Refresher Kit',
+    kit1: 'Kit ki amount: ₹{kit}.',
+    kit2: 'Yeh amount aapke payout se pehle hi kaati ja sakti hai.',
+    kit3: 'Related job deliver hone ke baad policy ke hisaab se refund process hota hai.',
+    kit4: 'Agar amount job assign hone se pehle kat gayi hai, tab bhi policy ke hisaab se refund delivery ke baad hi process hoga.',
+    tdsTitle: 'TDS',
+    tds1: 'Incentive par {tds}% TDS kaata jaata hai.',
+    tds2: 'Asli deduction laagu tax rules par depend karta hai. Sahi amount ke liye apna payout statement dekhein.',
+    supportTitle: 'Support Contacts', supportSub: 'Call karne ke liye number par tap karein.', call: 'Call karein',
+    noteTitle: 'Kripya dhyaan dein',
+    disclaimer: 'Yeh guide abhi laagu payment policy dikhati hai. Policy badal sakti hai. Kisi bhi doubt ke liye support team se contact karein.',
+    nextHint: 'Agla step: apni problem darj karein (form English mein hai).',
+    days: { MON: 'Somvaar', TUE: 'Mangalvaar', WED: 'Budhvaar', THU: 'Guruvaar', FRI: 'Shukravaar', SAT: 'Shanivaar', SUN: 'Ravivaar' }
+  },
+
+  hi: {
+    steps: ['आपकी जानकारी', 'भुगतान गाइड', 'समस्या दर्ज करें', 'पुष्टि'],
+    welcomeTitle: 'पार्टनर हेल्प सेंटर में आपका स्वागत है',
+    welcomeSub: 'भुगतान की जानकारी पाएँ और कुछ आसान चरणों में अपनी समस्या दर्ज करें।',
+    fullName: 'पूरा नाम', fullNamePh: 'अपना पूरा नाम लिखें',
+    mobile: 'रजिस्टर्ड मोबाइल नंबर', mobileHint: 'UC के साथ रजिस्टर्ड 10 अंकों का नंबर',
+    language: 'अपनी भाषा चुनें', langLabel: 'भाषा',
+    next: 'आगे', back: 'पीछे', checking: 'जाँच हो रही है…',
+    errName: 'कृपया अपना पूरा नाम लिखें।',
+    errMobile: '6, 7, 8 या 9 से शुरू होने वाला सही 10 अंकों का मोबाइल नंबर लिखें।',
+    errLang: 'कृपया एक भाषा चुनें।',
+    trackLink: 'पहले से शिकायत दर्ज की है? अपनी शिकायत ट्रैक करें',
+    privacy: 'आपकी जानकारी केवल आपके सहायता अनुरोध के लिए उपयोग की जाती है।',
+    otpSend: 'OTP भेजें', otpLabel: '6 अंकों का OTP लिखें', otpVerify: 'पुष्टि करें', otpSent: 'कोड {m} पर भेजा गया',
+    otpVerified: 'मोबाइल नंबर सत्यापित', otpRequired: 'आगे बढ़ने के लिए OTP से अपना नंबर सत्यापित करें।',
+    guideTitle: 'भुगतान नियम और पार्टनर गाइड',
+    guideSub: 'आपके भुगतान कैसे होते हैं, इसकी आसान जानकारी।',
+    visitTitle: 'विज़िट चार्ज',
+    visitBody: 'विज़िट चार्ज की राशि: ₹{visit}। यह कब मिलता है, इसके लिए नीचे रीविज़िट नियम देखें।',
+    ontimeTitle: 'ऑन-टाइम इंसेंटिव',
+    ontimeBody: 'समय पर जॉब पर पहुँचने का इंसेंटिव: ₹{ontime}।',
+    ratingTitle: 'रेटिंग इंसेंटिव',
+    ratingBody: '₹{rating} — केवल इंस्टॉलेशन जॉब पर लागू।',
+    ratingHowTitle: 'ग्राहक रेटिंग कैसे दें',
+    ratingAsk: 'जॉब पूरा होने के बाद ग्राहक से विनम्रता से ऐप में सर्विस को रेटिंग देने के लिए कहें और ऊपर के चरण दिखाएँ। केवल सच्ची रेटिंग माँगें — ग्राहक पर दबाव न डालें और नकली रेटिंग न माँगें।',
+    extraTitle: 'एक्स्ट्रा माइल भुगतान',
+    extraBody: 'अगर आपकी कुल आने-जाने की दूरी {km} किमी से ज़्यादा है, तो {km} किमी के ऊपर हर योग्य किलोमीटर के लिए ₹{rate} मिलते हैं।',
+    extraNote: 'यह दर केवल {km} किमी से ऊपर की दूरी पर लागू होती है, पूरी दूरी पर नहीं।',
+    extraExample: 'उदाहरण: आने-जाने की दूरी {exKm} किमी → योग्य दूरी {exEl} किमी ({exKm} − {km}) → {exEl} × ₹{rate} = ₹{exAmt}।',
+    calcTitle: 'अपनी दूरी जाँचें', calcLabel: 'आने-जाने की कुल दूरी (किमी)',
+    calcResult: 'योग्य किमी: {el} · एक्स्ट्रा माइल: ₹{amt}',
+    calcNone: '{km} किमी तक की दूरी एक्स्ट्रा माइल के लिए योग्य नहीं है।',
+    payoutTitle: 'पेआउट शेड्यूल',
+    payoutBody: 'पेआउट इन दिनों प्रोसेस होते हैं: {days}।',
+    payoutFirst: 'पहला पेआउट: विज़िट चार्ज।',
+    payoutNext: 'अगला पेआउट: इंसेंटिव / रेटिंग इंसेंटिव और एक्स्ट्रा माइल, जो लागू हो।',
+    payoutNote: 'यह पेआउट प्रोसेस होने का शेड्यूल है। बैंक खाते में पैसा पहुँचने का सही समय अलग हो सकता है।',
+    revisitTitle: 'रीविज़िट भुगतान नियम',
+    revisitFirstLabel: 'पहली विज़िट',
+    revisitFirst: 'इंसेंटिव + एक्स्ट्रा माइल (अगर योग्य हो)। विज़िट चार्ज नहीं मिलता।',
+    revisitSecondLabel: 'दूसरी विज़िट',
+    revisitSecond: 'विज़िट चार्ज + ऑन-टाइम इंसेंटिव + एक्स्ट्रा माइल (अगर योग्य हो)।',
+    spareTitle: 'स्पेयर पार्ट्स',
+    spare1: 'स्पेयर पार्ट्स केवल UC Partner App की प्रक्रिया से ही ऑर्डर और इंस्टॉल करें।',
+    spare2: 'स्पेयर की असली राशि लागू प्रक्रिया के अनुसार आपके Smart Wallet में दिखेगी।',
+    spare3: 'इंस्टॉल किए गए स्पेयर पर नीति के अनुसार {spare}% अतिरिक्त भुगतान मिलता है।',
+    kitTitle: 'रिफ्रेशर किट',
+    kit1: 'किट की राशि: ₹{kit}।',
+    kit2: 'यह राशि आपके पेआउट से पहले ही काटी जा सकती है।',
+    kit3: 'संबंधित जॉब डिलीवर होने के बाद नीति के अनुसार रिफंड प्रोसेस होता है।',
+    kit4: 'अगर राशि जॉब असाइन होने से पहले कट गई है, तब भी नीति के अनुसार रिफंड डिलीवरी के बाद ही प्रोसेस होगा।',
+    tdsTitle: 'TDS',
+    tds1: 'इंसेंटिव पर {tds}% TDS काटा जाता है।',
+    tds2: 'असल कटौती लागू टैक्स नियमों पर निर्भर करती है। सही राशि के लिए अपना पेआउट स्टेटमेंट देखें।',
+    supportTitle: 'सहायता संपर्क', supportSub: 'कॉल करने के लिए नंबर पर टैप करें।', call: 'कॉल करें',
+    noteTitle: 'कृपया ध्यान दें',
+    disclaimer: 'यह गाइड अभी लागू भुगतान नीति दिखाती है। नीति बदल सकती है। किसी भी शंका के लिए सहायता टीम से संपर्क करें।',
+    nextHint: 'अगला चरण: अपनी समस्या दर्ज करें (फ़ॉर्म अंग्रेज़ी में है)।',
+    days: { MON: 'सोमवार', TUE: 'मंगलवार', WED: 'बुधवार', THU: 'गुरुवार', FRI: 'शुक्रवार', SAT: 'शनिवार', SUN: 'रविवार' }
+  },
+
+  ta: {
+    steps: ['உங்கள் விவரங்கள்', 'கட்டண வழிகாட்டி', 'பிரச்சினை பதிவு', 'உறுதிப்படுத்தல்'],
+    welcomeTitle: 'பார்ட்னர் உதவி மையத்திற்கு வரவேற்கிறோம்',
+    welcomeSub: 'கட்டண தகவல்களைப் பெறுங்கள், சில எளிய படிகளில் உங்கள் பிரச்சினையைப் பதிவு செய்யுங்கள்.',
+    fullName: 'முழு பெயர்', fullNamePh: 'உங்கள் முழு பெயரை உள்ளிடவும்',
+    mobile: 'பதிவு செய்யப்பட்ட மொபைல் எண்', mobileHint: 'UC-யில் பதிவு செய்யப்பட்ட 10 இலக்க எண்',
+    language: 'உங்கள் மொழியைத் தேர்ந்தெடுக்கவும்', langLabel: 'மொழி',
+    next: 'அடுத்து', back: 'பின்செல்', checking: 'சரிபார்க்கிறது…',
+    errName: 'தயவுசெய்து உங்கள் முழு பெயரை உள்ளிடவும்.',
+    errMobile: '6, 7, 8 அல்லது 9 இல் தொடங்கும் சரியான 10 இலக்க மொபைல் எண்ணை உள்ளிடவும்.',
+    errLang: 'தயவுசெய்து ஒரு மொழியைத் தேர்ந்தெடுக்கவும்.',
+    trackLink: 'ஏற்கனவே புகார் அளித்துள்ளீர்களா? உங்கள் புகாரைக் கண்காணிக்கவும்',
+    privacy: 'உங்கள் விவரங்கள் உங்கள் உதவி கோரிக்கைக்காக மட்டுமே பயன்படுத்தப்படும்.',
+    otpSend: 'OTP அனுப்பு', otpLabel: '6 இலக்க OTP-ஐ உள்ளிடவும்', otpVerify: 'சரிபார்', otpSent: 'குறியீடு {m} க்கு அனுப்பப்பட்டது',
+    otpVerified: 'மொபைல் எண் சரிபார்க்கப்பட்டது', otpRequired: 'தொடர OTP மூலம் உங்கள் எண்ணைச் சரிபார்க்கவும்.',
+    guideTitle: 'கட்டண விதிகள் & பார்ட்னர் வழிகாட்டி',
+    guideSub: 'உங்கள் கட்டணங்கள் எப்படி வழங்கப்படுகின்றன என்பதற்கான எளிய விளக்கம்.',
+    visitTitle: 'விசிட் கட்டணம் (Visit Charge)',
+    visitBody: 'விசிட் கட்டணத் தொகை: ₹{visit}. இது எப்போது கிடைக்கும் என்பதற்கு கீழே உள்ள மறுவிசிட் விதிகளைப் பார்க்கவும்.',
+    ontimeTitle: 'நேரத்தில் வருகை ஊக்கத்தொகை (On-Time Incentive)',
+    ontimeBody: 'வேலைக்கு சரியான நேரத்தில் சென்றடைவதற்கான ஊக்கத்தொகை: ₹{ontime}.',
+    ratingTitle: 'ரேட்டிங் ஊக்கத்தொகை (Rating Incentive)',
+    ratingBody: '₹{rating} — இன்ஸ்டலேஷன் வேலைகளுக்கு மட்டுமே பொருந்தும்.',
+    ratingHowTitle: 'வாடிக்கையாளர் எப்படி ரேட்டிங் தருவது',
+    ratingAsk: 'வேலை முடிந்ததும், ஆப்பில் சேவைக்கு ரேட்டிங் தருமாறு வாடிக்கையாளரிடம் பணிவாகக் கேளுங்கள், மேலே உள்ள படிகளைக் காட்டுங்கள். உண்மையான ரேட்டிங்கை மட்டுமே கேளுங்கள் — வாடிக்கையாளரை வற்புறுத்தவோ போலி ரேட்டிங் கேட்கவோ வேண்டாம்.',
+    extraTitle: 'எக்ஸ்ட்ரா மைல் கட்டணம் (Extra Mile)',
+    extraBody: 'உங்கள் மொத்த சென்று திரும்பும் தூரம் {km} கி.மீ.க்கு மேல் இருந்தால், {km} கி.மீ.க்கு மேல் உள்ள ஒவ்வொரு தகுதியான கி.மீ.க்கும் ₹{rate} கிடைக்கும்.',
+    extraNote: 'இந்த விகிதம் {km} கி.மீ.க்கு மேல் உள்ள தூரத்திற்கு மட்டுமே பொருந்தும், முழு தூரத்திற்கும் அல்ல.',
+    extraExample: 'உதாரணம்: சென்று திரும்பும் தூரம் {exKm} கி.மீ. → தகுதியான தூரம் {exEl} கி.மீ. ({exKm} − {km}) → {exEl} × ₹{rate} = ₹{exAmt}.',
+    calcTitle: 'உங்கள் பயணத்தைச் சரிபார்க்கவும்', calcLabel: 'சென்று திரும்பும் மொத்த தூரம் (கி.மீ.)',
+    calcResult: 'தகுதியான கி.மீ.: {el} · எக்ஸ்ட்ரா மைல்: ₹{amt}',
+    calcNone: '{km} கி.மீ. வரையிலான தூரம் எக்ஸ்ட்ரா மைலுக்குத் தகுதியானது அல்ல.',
+    payoutTitle: 'பேஅவுட் அட்டவணை',
+    payoutBody: 'பேஅவுட்கள் இந்த நாட்களில் செயல்படுத்தப்படுகின்றன: {days}.',
+    payoutFirst: 'முதல் பேஅவுட்: விசிட் கட்டணம்.',
+    payoutNext: 'அடுத்த பேஅவுட்: ஊக்கத்தொகை / ரேட்டிங் ஊக்கத்தொகை மற்றும் எக்ஸ்ட்ரா மைல், பொருந்தும் வகையில்.',
+    payoutNote: 'இது பேஅவுட் செயல்படுத்தும் அட்டவணை மட்டுமே. உங்கள் வங்கிக் கணக்கில் பணம் வந்து சேரும் சரியான நேரம் மாறுபடலாம்.',
+    revisitTitle: 'மறுவிசிட் கட்டண விதிகள் (Revisit)',
+    revisitFirstLabel: 'முதல் விசிட்',
+    revisitFirst: 'ஊக்கத்தொகை + எக்ஸ்ட்ரா மைல் (தகுதி இருந்தால்). விசிட் கட்டணம் கிடையாது.',
+    revisitSecondLabel: 'இரண்டாவது விசிட்',
+    revisitSecond: 'விசிட் கட்டணம் + நேரத்தில் வருகை ஊக்கத்தொகை + எக்ஸ்ட்ரா மைல் (தகுதி இருந்தால்).',
+    spareTitle: 'ஸ்பேர் பாகங்கள்',
+    spare1: 'ஸ்பேர் பாகங்களை UC Partner App செயல்முறை மூலம் மட்டுமே ஆர்டர் செய்து பொருத்தவும்.',
+    spare2: 'ஸ்பேரின் உண்மையான தொகை பொருந்தும் செயல்முறைப்படி உங்கள் Smart Wallet-இல் காட்டப்படும்.',
+    spare3: 'பொருத்தப்பட்ட ஸ்பேர்களுக்கு கொள்கைப்படி கூடுதலாக {spare}% கட்டணம் வழங்கப்படும்.',
+    kitTitle: 'ரிஃப்ரெஷர் கிட்',
+    kit1: 'கிட் தொகை: ₹{kit}.',
+    kit2: 'இந்தத் தொகை உங்கள் பேஅவுட்டிலிருந்து முன்கூட்டியே பிடித்தம் செய்யப்படலாம்.',
+    kit3: 'தொடர்புடைய வேலை டெலிவர் ஆன பிறகு, கொள்கைப்படி ரீஃபண்ட் செயல்படுத்தப்படும்.',
+    kit4: 'வேலை ஒதுக்கப்படுவதற்கு முன்பே தொகை பிடிக்கப்பட்டிருந்தாலும், கொள்கைப்படி டெலிவரிக்குப் பிறகே ரீஃபண்ட் செயல்படுத்தப்படும்.',
+    tdsTitle: 'TDS',
+    tds1: 'ஊக்கத்தொகைகளில் {tds}% TDS பிடித்தம் செய்யப்படும்.',
+    tds2: 'உண்மையான பிடித்தம் பொருந்தும் வரி விதிகளைப் பொறுத்தது. சரியான தொகைக்கு உங்கள் பேஅவுட் அறிக்கையைப் பார்க்கவும்.',
+    supportTitle: 'உதவி தொடர்புகள்', supportSub: 'அழைக்க எண்ணைத் தட்டவும்.', call: 'அழைக்க',
+    noteTitle: 'கவனிக்கவும்',
+    disclaimer: 'இந்த வழிகாட்டி தற்போது அமைக்கப்பட்டுள்ள கட்டணக் கொள்கையைக் காட்டுகிறது. கொள்கை மாறலாம். ஏதேனும் சந்தேகம் இருந்தால் உதவிக் குழுவைத் தொடர்பு கொள்ளவும்.',
+    nextHint: 'அடுத்த படி: உங்கள் பிரச்சினையைப் பதிவு செய்யவும் (படிவம் ஆங்கிலத்தில் உள்ளது).',
+    days: { MON: 'திங்கள்', TUE: 'செவ்வாய்', WED: 'புதன்', THU: 'வியாழன்', FRI: 'வெள்ளி', SAT: 'சனி', SUN: 'ஞாயிறு' }
+  },
+
+  te: {
+    steps: ['మీ వివరాలు', 'చెల్లింపు గైడ్', 'సమస్య నమోదు', 'నిర్ధారణ'],
+    welcomeTitle: 'పార్ట్‌నర్ హెల్ప్ సెంటర్‌కు స్వాగతం',
+    welcomeSub: 'చెల్లింపుల సమాచారం పొందండి, కొన్ని సులభమైన దశల్లో మీ సమస్యను నమోదు చేయండి.',
+    fullName: 'పూర్తి పేరు', fullNamePh: 'మీ పూర్తి పేరు నమోదు చేయండి',
+    mobile: 'రిజిస్టర్డ్ మొబైల్ నంబర్', mobileHint: 'UC లో రిజిస్టర్ అయిన 10 అంకెల నంబర్',
+    language: 'మీ భాషను ఎంచుకోండి', langLabel: 'భాష',
+    next: 'తదుపరి', back: 'వెనుకకు', checking: 'తనిఖీ చేస్తోంది…',
+    errName: 'దయచేసి మీ పూర్తి పేరు నమోదు చేయండి.',
+    errMobile: '6, 7, 8 లేదా 9 తో మొదలయ్యే సరైన 10 అంకెల మొబైల్ నంబర్ నమోదు చేయండి.',
+    errLang: 'దయచేసి ఒక భాషను ఎంచుకోండి.',
+    trackLink: 'ఇప్పటికే ఫిర్యాదు చేశారా? మీ ఫిర్యాదును ట్రాక్ చేయండి',
+    privacy: 'మీ వివరాలు మీ సహాయ అభ్యర్థన కోసం మాత్రమే ఉపయోగించబడతాయి.',
+    otpSend: 'OTP పంపండి', otpLabel: '6 అంకెల OTP నమోదు చేయండి', otpVerify: 'ధృవీకరించండి', otpSent: 'కోడ్ {m} కు పంపబడింది',
+    otpVerified: 'మొబైల్ నంబర్ ధృవీకరించబడింది', otpRequired: 'కొనసాగడానికి OTP ద్వారా మీ నంబర్‌ను ధృవీకరించండి.',
+    guideTitle: 'చెల్లింపు నియమాలు & పార్ట్‌నర్ గైడ్',
+    guideSub: 'మీ చెల్లింపులు ఎలా జరుగుతాయో సులభమైన వివరణ.',
+    visitTitle: 'విజిట్ ఛార్జ్ (Visit Charge)',
+    visitBody: 'విజిట్ ఛార్జ్ మొత్తం: ₹{visit}. ఇది ఎప్పుడు వర్తిస్తుందో తెలుసుకోవడానికి క్రింది రీవిజిట్ నియమాలు చూడండి.',
+    ontimeTitle: 'ఆన్-టైమ్ ఇన్సెంటివ్',
+    ontimeBody: 'జాబ్‌కు సమయానికి చేరుకున్నందుకు ఇన్సెంటివ్: ₹{ontime}.',
+    ratingTitle: 'రేటింగ్ ఇన్సెంటివ్',
+    ratingBody: '₹{rating} — ఇన్‌స్టలేషన్ జాబ్‌లకు మాత్రమే వర్తిస్తుంది.',
+    ratingHowTitle: 'కస్టమర్ రేటింగ్ ఎలా ఇవ్వాలి',
+    ratingAsk: 'జాబ్ పూర్తయిన తర్వాత, యాప్‌లో సర్వీస్‌కు రేటింగ్ ఇవ్వమని కస్టమర్‌ను మర్యాదగా అడగండి, పై దశలను చూపించండి. నిజమైన రేటింగ్ మాత్రమే అడగండి — కస్టమర్‌పై ఒత్తిడి చేయవద్దు, నకిలీ రేటింగ్ అడగవద్దు.',
+    extraTitle: 'ఎక్స్‌ట్రా మైల్ చెల్లింపు',
+    extraBody: 'మీ మొత్తం రాకపోకల (రౌండ్-ట్రిప్) దూరం {km} కి.మీ. కంటే ఎక్కువ అయితే, {km} కి.మీ. పైన ఉన్న ప్రతి అర్హత కలిగిన కి.మీ.కు ₹{rate} లభిస్తుంది.',
+    extraNote: 'ఈ రేటు {km} కి.మీ. పైన ఉన్న దూరానికి మాత్రమే వర్తిస్తుంది, మొత్తం దూరానికి కాదు.',
+    extraExample: 'ఉదాహరణ: రాకపోకల దూరం {exKm} కి.మీ. → అర్హత దూరం {exEl} కి.మీ. ({exKm} − {km}) → {exEl} × ₹{rate} = ₹{exAmt}.',
+    calcTitle: 'మీ ప్రయాణాన్ని తనిఖీ చేయండి', calcLabel: 'మొత్తం రాకపోకల దూరం (కి.మీ.)',
+    calcResult: 'అర్హత కి.మీ.: {el} · ఎక్స్‌ట్రా మైల్: ₹{amt}',
+    calcNone: '{km} కి.మీ. వరకు దూరం ఎక్స్‌ట్రా మైల్‌కు అర్హత కాదు.',
+    payoutTitle: 'పేఅవుట్ షెడ్యూల్',
+    payoutBody: 'పేఅవుట్‌లు ఈ రోజుల్లో ప్రాసెస్ చేయబడతాయి: {days}.',
+    payoutFirst: 'మొదటి పేఅవుట్: విజిట్ ఛార్జ్.',
+    payoutNext: 'తదుపరి పేఅవుట్: ఇన్సెంటివ్ / రేటింగ్ ఇన్సెంటివ్ మరియు ఎక్స్‌ట్రా మైల్, వర్తించినట్లు.',
+    payoutNote: 'ఇది పేఅవుట్ ప్రాసెసింగ్ షెడ్యూల్ మాత్రమే. మీ బ్యాంక్ ఖాతాలో డబ్బు జమ అయ్యే ఖచ్చితమైన సమయం మారవచ్చు.',
+    revisitTitle: 'రీవిజిట్ చెల్లింపు నియమాలు',
+    revisitFirstLabel: 'మొదటి విజిట్',
+    revisitFirst: 'ఇన్సెంటివ్ + ఎక్స్‌ట్రా మైల్ (అర్హత ఉంటే). విజిట్ ఛార్జ్ ఉండదు.',
+    revisitSecondLabel: 'రెండవ విజిట్',
+    revisitSecond: 'విజిట్ ఛార్జ్ + ఆన్-టైమ్ ఇన్సెంటివ్ + ఎక్స్‌ట్రా మైల్ (అర్హత ఉంటే).',
+    spareTitle: 'స్పేర్ పార్ట్స్',
+    spare1: 'స్పేర్ పార్ట్స్‌ను UC Partner App ప్రక్రియ ద్వారా మాత్రమే ఆర్డర్ చేసి ఇన్‌స్టాల్ చేయండి.',
+    spare2: 'స్పేర్ యొక్క అసలు మొత్తం వర్తించే ప్రక్రియ ప్రకారం మీ Smart Wallet లో కనిపిస్తుంది.',
+    spare3: 'ఇన్‌స్టాల్ చేసిన స్పేర్‌లకు పాలసీ ప్రకారం అదనంగా {spare}% చెల్లింపు ఉంటుంది.',
+    kitTitle: 'రిఫ్రెషర్ కిట్',
+    kit1: 'కిట్ మొత్తం: ₹{kit}.',
+    kit2: 'ఈ మొత్తం మీ పేఅవుట్ నుండి ముందుగానే మినహాయించబడవచ్చు.',
+    kit3: 'సంబంధిత జాబ్ డెలివర్ అయిన తర్వాత, పాలసీ ప్రకారం రీఫండ్ ప్రాసెస్ చేయబడుతుంది.',
+    kit4: 'జాబ్ కేటాయించకముందే మొత్తం మినహాయించబడినా, పాలసీ ప్రకారం డెలివరీ తర్వాతే రీఫండ్ ప్రాసెస్ అవుతుంది.',
+    tdsTitle: 'TDS',
+    tds1: 'ఇన్సెంటివ్‌లపై {tds}% TDS మినహాయించబడుతుంది.',
+    tds2: 'అసలు మినహాయింపులు వర్తించే పన్ను నియమాలపై ఆధారపడి ఉంటాయి. ఖచ్చితమైన మొత్తాల కోసం మీ పేఅవుట్ స్టేట్‌మెంట్ చూడండి.',
+    supportTitle: 'సహాయ సంప్రదింపులు', supportSub: 'కాల్ చేయడానికి నంబర్‌పై ట్యాప్ చేయండి.', call: 'కాల్ చేయండి',
+    noteTitle: 'దయచేసి గమనించండి',
+    disclaimer: 'ఈ గైడ్ ప్రస్తుతం సెట్ చేసిన చెల్లింపు పాలసీని చూపిస్తుంది. పాలసీ మారవచ్చు. ఏదైనా సందేహం ఉంటే సహాయ బృందాన్ని సంప్రదించండి.',
+    nextHint: 'తదుపరి దశ: మీ సమస్యను నమోదు చేయండి (ఫారం ఇంగ్లీష్‌లో ఉంటుంది).',
+    days: { MON: 'సోమవారం', TUE: 'మంగళవారం', WED: 'బుధవారం', THU: 'గురువారం', FRI: 'శుక్రవారం', SAT: 'శనివారం', SUN: 'ఆదివారం' }
+  },
+
+  kn: {
+    steps: ['ನಿಮ್ಮ ವಿವರಗಳು', 'ಪಾವತಿ ಮಾರ್ಗದರ್ಶಿ', 'ಸಮಸ್ಯೆ ದಾಖಲು', 'ದೃಢೀಕರಣ'],
+    welcomeTitle: 'ಪಾರ್ಟ್ನರ್ ಹೆಲ್ಪ್ ಸೆಂಟರ್‌ಗೆ ಸ್ವಾಗತ',
+    welcomeSub: 'ಪಾವತಿ ಮಾಹಿತಿಯನ್ನು ಪಡೆಯಿರಿ ಮತ್ತು ಕೆಲವು ಸುಲಭ ಹಂತಗಳಲ್ಲಿ ನಿಮ್ಮ ಸಮಸ್ಯೆಯನ್ನು ದಾಖಲಿಸಿ.',
+    fullName: 'ಪೂರ್ಣ ಹೆಸರು', fullNamePh: 'ನಿಮ್ಮ ಪೂರ್ಣ ಹೆಸರನ್ನು ನಮೂದಿಸಿ',
+    mobile: 'ನೋಂದಾಯಿತ ಮೊಬೈಲ್ ಸಂಖ್ಯೆ', mobileHint: 'UC ಯಲ್ಲಿ ನೋಂದಾಯಿಸಿದ 10 ಅಂಕಿಯ ಸಂಖ್ಯೆ',
+    language: 'ನಿಮ್ಮ ಭಾಷೆಯನ್ನು ಆಯ್ಕೆಮಾಡಿ', langLabel: 'ಭಾಷೆ',
+    next: 'ಮುಂದೆ', back: 'ಹಿಂದೆ', checking: 'ಪರಿಶೀಲಿಸಲಾಗುತ್ತಿದೆ…',
+    errName: 'ದಯವಿಟ್ಟು ನಿಮ್ಮ ಪೂರ್ಣ ಹೆಸರನ್ನು ನಮೂದಿಸಿ.',
+    errMobile: '6, 7, 8 ಅಥವಾ 9 ರಿಂದ ಆರಂಭವಾಗುವ ಸರಿಯಾದ 10 ಅಂಕಿಯ ಮೊಬೈಲ್ ಸಂಖ್ಯೆಯನ್ನು ನಮೂದಿಸಿ.',
+    errLang: 'ದಯವಿಟ್ಟು ಒಂದು ಭಾಷೆಯನ್ನು ಆಯ್ಕೆಮಾಡಿ.',
+    trackLink: 'ಈಗಾಗಲೇ ದೂರು ನೀಡಿದ್ದೀರಾ? ನಿಮ್ಮ ದೂರನ್ನು ಟ್ರ್ಯಾಕ್ ಮಾಡಿ',
+    privacy: 'ನಿಮ್ಮ ವಿವರಗಳನ್ನು ನಿಮ್ಮ ಸಹಾಯ ವಿನಂತಿಗಾಗಿ ಮಾತ್ರ ಬಳಸಲಾಗುತ್ತದೆ.',
+    otpSend: 'OTP ಕಳುಹಿಸಿ', otpLabel: '6 ಅಂಕಿಯ OTP ನಮೂದಿಸಿ', otpVerify: 'ಪರಿಶೀಲಿಸಿ', otpSent: 'ಕೋಡ್ ಅನ್ನು {m} ಗೆ ಕಳುಹಿಸಲಾಗಿದೆ',
+    otpVerified: 'ಮೊಬೈಲ್ ಸಂಖ್ಯೆ ಪರಿಶೀಲಿಸಲಾಗಿದೆ', otpRequired: 'ಮುಂದುವರಿಯಲು OTP ಮೂಲಕ ನಿಮ್ಮ ಸಂಖ್ಯೆಯನ್ನು ಪರಿಶೀಲಿಸಿ.',
+    guideTitle: 'ಪಾವತಿ ನಿಯಮಗಳು & ಪಾರ್ಟ್ನರ್ ಮಾರ್ಗದರ್ಶಿ',
+    guideSub: 'ನಿಮ್ಮ ಪಾವತಿಗಳು ಹೇಗೆ ನಡೆಯುತ್ತವೆ ಎಂಬ ಸರಳ ವಿವರಣೆ.',
+    visitTitle: 'ವಿಸಿಟ್ ಚಾರ್ಜ್ (Visit Charge)',
+    visitBody: 'ವಿಸಿಟ್ ಚಾರ್ಜ್ ಮೊತ್ತ: ₹{visit}. ಇದು ಯಾವಾಗ ಅನ್ವಯಿಸುತ್ತದೆ ಎಂದು ತಿಳಿಯಲು ಕೆಳಗಿನ ರೀವಿಸಿಟ್ ನಿಯಮಗಳನ್ನು ನೋಡಿ.',
+    ontimeTitle: 'ಆನ್-ಟೈಮ್ ಇನ್ಸೆಂಟಿವ್',
+    ontimeBody: 'ಕೆಲಸಕ್ಕೆ ಸಮಯಕ್ಕೆ ಸರಿಯಾಗಿ ತಲುಪಿದ್ದಕ್ಕೆ ಇನ್ಸೆಂಟಿವ್: ₹{ontime}.',
+    ratingTitle: 'ರೇಟಿಂಗ್ ಇನ್ಸೆಂಟಿವ್',
+    ratingBody: '₹{rating} — ಇನ್‌ಸ್ಟಾಲೇಶನ್ ಕೆಲಸಗಳಿಗೆ ಮಾತ್ರ ಅನ್ವಯಿಸುತ್ತದೆ.',
+    ratingHowTitle: 'ಗ್ರಾಹಕರು ರೇಟಿಂಗ್ ಹೇಗೆ ನೀಡಬೇಕು',
+    ratingAsk: 'ಕೆಲಸ ಮುಗಿದ ನಂತರ, ಆ್ಯಪ್‌ನಲ್ಲಿ ಸೇವೆಗೆ ರೇಟಿಂಗ್ ನೀಡುವಂತೆ ಗ್ರಾಹಕರನ್ನು ವಿನಯದಿಂದ ಕೇಳಿ ಮತ್ತು ಮೇಲಿನ ಹಂತಗಳನ್ನು ತೋರಿಸಿ. ನಿಜವಾದ ರೇಟಿಂಗ್ ಮಾತ್ರ ಕೇಳಿ — ಗ್ರಾಹಕರ ಮೇಲೆ ಒತ್ತಡ ಹೇರಬೇಡಿ ಮತ್ತು ನಕಲಿ ರೇಟಿಂಗ್ ಕೇಳಬೇಡಿ.',
+    extraTitle: 'ಎಕ್ಸ್‌ಟ್ರಾ ಮೈಲ್ ಪಾವತಿ',
+    extraBody: 'ನಿಮ್ಮ ಒಟ್ಟು ಹೋಗಿ-ಬರುವ (ರೌಂಡ್-ಟ್ರಿಪ್) ದೂರ {km} ಕಿ.ಮೀ.ಗಿಂತ ಹೆಚ್ಚಾಗಿದ್ದರೆ, {km} ಕಿ.ಮೀ. ಮೇಲಿನ ಪ್ರತಿ ಅರ್ಹ ಕಿ.ಮೀ.ಗೆ ₹{rate} ಸಿಗುತ್ತದೆ.',
+    extraNote: 'ಈ ದರ {km} ಕಿ.ಮೀ. ಮೇಲಿನ ದೂರಕ್ಕೆ ಮಾತ್ರ ಅನ್ವಯಿಸುತ್ತದೆ, ಸಂಪೂರ್ಣ ದೂರಕ್ಕಲ್ಲ.',
+    extraExample: 'ಉದಾಹರಣೆ: ಹೋಗಿ-ಬರುವ ದೂರ {exKm} ಕಿ.ಮೀ. → ಅರ್ಹ ದೂರ {exEl} ಕಿ.ಮೀ. ({exKm} − {km}) → {exEl} × ₹{rate} = ₹{exAmt}.',
+    calcTitle: 'ನಿಮ್ಮ ಪ್ರಯಾಣವನ್ನು ಪರಿಶೀಲಿಸಿ', calcLabel: 'ಒಟ್ಟು ಹೋಗಿ-ಬರುವ ದೂರ (ಕಿ.ಮೀ.)',
+    calcResult: 'ಅರ್ಹ ಕಿ.ಮೀ.: {el} · ಎಕ್ಸ್‌ಟ್ರಾ ಮೈಲ್: ₹{amt}',
+    calcNone: '{km} ಕಿ.ಮೀ. ವರೆಗಿನ ದೂರ ಎಕ್ಸ್‌ಟ್ರಾ ಮೈಲ್‌ಗೆ ಅರ್ಹವಲ್ಲ.',
+    payoutTitle: 'ಪೇಔಟ್ ವೇಳಾಪಟ್ಟಿ',
+    payoutBody: 'ಪೇಔಟ್‌ಗಳನ್ನು ಈ ದಿನಗಳಲ್ಲಿ ಪ್ರಕ್ರಿಯೆಗೊಳಿಸಲಾಗುತ್ತದೆ: {days}.',
+    payoutFirst: 'ಮೊದಲ ಪೇಔಟ್: ವಿಸಿಟ್ ಚಾರ್ಜ್.',
+    payoutNext: 'ಮುಂದಿನ ಪೇಔಟ್: ಇನ್ಸೆಂಟಿವ್ / ರೇಟಿಂಗ್ ಇನ್ಸೆಂಟಿವ್ ಮತ್ತು ಎಕ್ಸ್‌ಟ್ರಾ ಮೈಲ್, ಅನ್ವಯವಾಗುವಂತೆ.',
+    payoutNote: 'ಇದು ಪೇಔಟ್ ಪ್ರಕ್ರಿಯೆಯ ವೇಳಾಪಟ್ಟಿ ಮಾತ್ರ. ನಿಮ್ಮ ಬ್ಯಾಂಕ್ ಖಾತೆಗೆ ಹಣ ಜಮೆಯಾಗುವ ನಿಖರ ಸಮಯ ಬದಲಾಗಬಹುದು.',
+    revisitTitle: 'ರೀವಿಸಿಟ್ ಪಾವತಿ ನಿಯಮಗಳು',
+    revisitFirstLabel: 'ಮೊದಲ ಭೇಟಿ',
+    revisitFirst: 'ಇನ್ಸೆಂಟಿವ್ + ಎಕ್ಸ್‌ಟ್ರಾ ಮೈಲ್ (ಅರ್ಹವಾಗಿದ್ದರೆ). ವಿಸಿಟ್ ಚಾರ್ಜ್ ಇಲ್ಲ.',
+    revisitSecondLabel: 'ಎರಡನೇ ಭೇಟಿ',
+    revisitSecond: 'ವಿಸಿಟ್ ಚಾರ್ಜ್ + ಆನ್-ಟೈಮ್ ಇನ್ಸೆಂಟಿವ್ + ಎಕ್ಸ್‌ಟ್ರಾ ಮೈಲ್ (ಅರ್ಹವಾಗಿದ್ದರೆ).',
+    spareTitle: 'ಸ್ಪೇರ್ ಪಾರ್ಟ್ಸ್',
+    spare1: 'ಸ್ಪೇರ್ ಪಾರ್ಟ್ಸ್‌ಗಳನ್ನು UC Partner App ಪ್ರಕ್ರಿಯೆಯ ಮೂಲಕ ಮಾತ್ರ ಆರ್ಡರ್ ಮಾಡಿ ಮತ್ತು ಅಳವಡಿಸಿ.',
+    spare2: 'ಸ್ಪೇರ್‌ನ ನಿಜವಾದ ಮೊತ್ತವು ಅನ್ವಯಿಸುವ ಪ್ರಕ್ರಿಯೆಯಂತೆ ನಿಮ್ಮ Smart Wallet ನಲ್ಲಿ ಕಾಣಿಸುತ್ತದೆ.',
+    spare3: 'ಅಳವಡಿಸಿದ ಸ್ಪೇರ್‌ಗಳಿಗೆ ನೀತಿಯಂತೆ ಹೆಚ್ಚುವರಿ {spare}% ಪಾವತಿ ಇರುತ್ತದೆ.',
+    kitTitle: 'ರಿಫ್ರೆಶರ್ ಕಿಟ್',
+    kit1: 'ಕಿಟ್ ಮೊತ್ತ: ₹{kit}.',
+    kit2: 'ಈ ಮೊತ್ತವನ್ನು ನಿಮ್ಮ ಪೇಔಟ್‌ನಿಂದ ಮುಂಚಿತವಾಗಿ ಕಡಿತಗೊಳಿಸಬಹುದು.',
+    kit3: 'ಸಂಬಂಧಿತ ಕೆಲಸ ಡೆಲಿವರ್ ಆದ ನಂತರ, ನೀತಿಯಂತೆ ರೀಫಂಡ್ ಪ್ರಕ್ರಿಯೆಗೊಳಿಸಲಾಗುತ್ತದೆ.',
+    kit4: 'ಕೆಲಸ ನಿಯೋಜಿಸುವ ಮೊದಲೇ ಮೊತ್ತ ಕಡಿತವಾಗಿದ್ದರೂ, ನೀತಿಯಂತೆ ಡೆಲಿವರಿಯ ನಂತರವೇ ರೀಫಂಡ್ ಪ್ರಕ್ರಿಯೆಗೊಳ್ಳುತ್ತದೆ.',
+    tdsTitle: 'TDS',
+    tds1: 'ಇನ್ಸೆಂಟಿವ್‌ಗಳ ಮೇಲೆ {tds}% TDS ಕಡಿತಗೊಳಿಸಲಾಗುತ್ತದೆ.',
+    tds2: 'ನಿಜವಾದ ಕಡಿತಗಳು ಅನ್ವಯಿಸುವ ತೆರಿಗೆ ನಿಯಮಗಳನ್ನು ಅವಲಂಬಿಸಿರುತ್ತವೆ. ನಿಖರ ಮೊತ್ತಕ್ಕಾಗಿ ನಿಮ್ಮ ಪೇಔಟ್ ಸ್ಟೇಟ್‌ಮೆಂಟ್ ನೋಡಿ.',
+    supportTitle: 'ಸಹಾಯ ಸಂಪರ್ಕಗಳು', supportSub: 'ಕರೆ ಮಾಡಲು ಸಂಖ್ಯೆಯನ್ನು ಟ್ಯಾಪ್ ಮಾಡಿ.', call: 'ಕರೆ ಮಾಡಿ',
+    noteTitle: 'ದಯವಿಟ್ಟು ಗಮನಿಸಿ',
+    disclaimer: 'ಈ ಮಾರ್ಗದರ್ಶಿ ಪ್ರಸ್ತುತ ಹೊಂದಿಸಲಾದ ಪಾವತಿ ನೀತಿಯನ್ನು ತೋರಿಸುತ್ತದೆ. ನೀತಿ ಬದಲಾಗಬಹುದು. ಯಾವುದೇ ಸಂದೇಹವಿದ್ದರೆ ಸಹಾಯ ತಂಡವನ್ನು ಸಂಪರ್ಕಿಸಿ.',
+    nextHint: 'ಮುಂದಿನ ಹಂತ: ನಿಮ್ಮ ಸಮಸ್ಯೆಯನ್ನು ದಾಖಲಿಸಿ (ಫಾರ್ಮ್ ಇಂಗ್ಲಿಷ್‌ನಲ್ಲಿದೆ).',
+    days: { MON: 'ಸೋಮವಾರ', TUE: 'ಮಂಗಳವಾರ', WED: 'ಬುಧವಾರ', THU: 'ಗುರುವಾರ', FRI: 'ಶುಕ್ರವಾರ', SAT: 'ಶನಿವಾರ', SUN: 'ಭಾನುವಾರ' }
+  },
+
+  ml: {
+    steps: ['നിങ്ങളുടെ വിവരങ്ങൾ', 'പേയ്‌മെന്റ് ഗൈഡ്', 'പ്രശ്നം രേഖപ്പെടുത്തുക', 'സ്ഥിരീകരണം'],
+    welcomeTitle: 'പാർട്ണർ ഹെൽപ്പ് സെന്ററിലേക്ക് സ്വാഗതം',
+    welcomeSub: 'പേയ്‌മെന്റ് വിവരങ്ങൾ അറിയുക, ചില ലളിതമായ ഘട്ടങ്ങളിലൂടെ നിങ്ങളുടെ പ്രശ്നം രേഖപ്പെടുത്തുക.',
+    fullName: 'മുഴുവൻ പേര്', fullNamePh: 'നിങ്ങളുടെ മുഴുവൻ പേര് നൽകുക',
+    mobile: 'രജിസ്റ്റർ ചെയ്ത മൊബൈൽ നമ്പർ', mobileHint: 'UC-യിൽ രജിസ്റ്റർ ചെയ്ത 10 അക്ക നമ്പർ',
+    language: 'നിങ്ങളുടെ ഭാഷ തിരഞ്ഞെടുക്കുക', langLabel: 'ഭാഷ',
+    next: 'അടുത്തത്', back: 'പിന്നോട്ട്', checking: 'പരിശോധിക്കുന്നു…',
+    errName: 'ദയവായി നിങ്ങളുടെ മുഴുവൻ പേര് നൽകുക.',
+    errMobile: '6, 7, 8 അല്ലെങ്കിൽ 9-ൽ ആരംഭിക്കുന്ന ശരിയായ 10 അക്ക മൊബൈൽ നമ്പർ നൽകുക.',
+    errLang: 'ദയവായി ഒരു ഭാഷ തിരഞ്ഞെടുക്കുക.',
+    trackLink: 'ഇതിനകം പരാതി നൽകിയിട്ടുണ്ടോ? നിങ്ങളുടെ പരാതി ട്രാക്ക് ചെയ്യുക',
+    privacy: 'നിങ്ങളുടെ വിവരങ്ങൾ നിങ്ങളുടെ സഹായ അഭ്യർത്ഥനയ്ക്കായി മാത്രമേ ഉപയോഗിക്കൂ.',
+    otpSend: 'OTP അയയ്ക്കുക', otpLabel: '6 അക്ക OTP നൽകുക', otpVerify: 'പരിശോധിക്കുക', otpSent: 'കോഡ് {m} എന്ന നമ്പറിലേക്ക് അയച്ചു',
+    otpVerified: 'മൊബൈൽ നമ്പർ പരിശോധിച്ചു', otpRequired: 'തുടരാൻ OTP വഴി നിങ്ങളുടെ നമ്പർ പരിശോധിക്കുക.',
+    guideTitle: 'പേയ്‌മെന്റ് നിയമങ്ങളും പാർട്ണർ ഗൈഡും',
+    guideSub: 'നിങ്ങളുടെ പേയ്‌മെന്റുകൾ എങ്ങനെ നടക്കുന്നു എന്നതിന്റെ ലളിതമായ വിശദീകരണം.',
+    visitTitle: 'വിസിറ്റ് ചാർജ് (Visit Charge)',
+    visitBody: 'വിസിറ്റ് ചാർജ് തുക: ₹{visit}. ഇത് എപ്പോൾ ബാധകമാകുമെന്ന് അറിയാൻ താഴെയുള്ള റീവിസിറ്റ് നിയമങ്ങൾ കാണുക.',
+    ontimeTitle: 'ഓൺ-ടൈം ഇൻസെന്റീവ്',
+    ontimeBody: 'ജോലിസ്ഥലത്ത് സമയത്ത് എത്തുന്നതിനുള്ള ഇൻസെന്റീവ്: ₹{ontime}.',
+    ratingTitle: 'റേറ്റിംഗ് ഇൻസെന്റീവ്',
+    ratingBody: '₹{rating} — ഇൻസ്റ്റലേഷൻ ജോലികൾക്ക് മാത്രം ബാധകം.',
+    ratingHowTitle: 'ഉപഭോക്താവ് എങ്ങനെ റേറ്റിംഗ് നൽകണം',
+    ratingAsk: 'ജോലി പൂർത്തിയായ ശേഷം, ആപ്പിൽ സേവനത്തിന് റേറ്റിംഗ് നൽകാൻ ഉപഭോക്താവിനോട് മാന്യമായി ആവശ്യപ്പെടുക, മുകളിലെ ഘട്ടങ്ങൾ കാണിക്കുക. യഥാർത്ഥ റേറ്റിംഗ് മാത്രം ചോദിക്കുക — ഉപഭോക്താവിനെ നിർബന്ധിക്കുകയോ വ്യാജ റേറ്റിംഗ് ചോദിക്കുകയോ ചെയ്യരുത്.',
+    extraTitle: 'എക്സ്ട്രാ മൈൽ പേയ്‌മെന്റ്',
+    extraBody: 'നിങ്ങളുടെ ആകെ പോയി-വരവ് (റൗണ്ട്-ട്രിപ്പ്) ദൂരം {km} കി.മീ.യിൽ കൂടുതലാണെങ്കിൽ, {km} കി.മീ.ക്ക് മുകളിലുള്ള ഓരോ യോഗ്യമായ കി.മീ.ക്കും ₹{rate} ലഭിക്കും.',
+    extraNote: 'ഈ നിരക്ക് {km} കി.മീ.ക്ക് മുകളിലുള്ള ദൂരത്തിന് മാത്രമാണ് ബാധകം, മുഴുവൻ ദൂരത്തിനുമല്ല.',
+    extraExample: 'ഉദാഹരണം: പോയി-വരവ് ദൂരം {exKm} കി.മീ. → യോഗ്യമായ ദൂരം {exEl} കി.മീ. ({exKm} − {km}) → {exEl} × ₹{rate} = ₹{exAmt}.',
+    calcTitle: 'നിങ്ങളുടെ യാത്ര പരിശോധിക്കുക', calcLabel: 'ആകെ പോയി-വരവ് ദൂരം (കി.മീ.)',
+    calcResult: 'യോഗ്യമായ കി.മീ.: {el} · എക്സ്ട്രാ മൈൽ: ₹{amt}',
+    calcNone: '{km} കി.മീ. വരെയുള്ള ദൂരം എക്സ്ട്രാ മൈലിന് യോഗ്യമല്ല.',
+    payoutTitle: 'പേഔട്ട് ഷെഡ്യൂൾ',
+    payoutBody: 'പേഔട്ടുകൾ ഈ ദിവസങ്ങളിൽ പ്രോസസ് ചെയ്യുന്നു: {days}.',
+    payoutFirst: 'ആദ്യ പേഔട്ട്: വിസിറ്റ് ചാർജ്.',
+    payoutNext: 'അടുത്ത പേഔട്ട്: ഇൻസെന്റീവ് / റേറ്റിംഗ് ഇൻസെന്റീവ്, എക്സ്ട്രാ മൈൽ എന്നിവ, ബാധകമായതുപോലെ.',
+    payoutNote: 'ഇത് പേഔട്ട് പ്രോസസ് ചെയ്യുന്ന ഷെഡ്യൂൾ മാത്രമാണ്. നിങ്ങളുടെ ബാങ്ക് അക്കൗണ്ടിൽ പണം എത്തുന്ന കൃത്യമായ സമയം വ്യത്യാസപ്പെടാം.',
+    revisitTitle: 'റീവിസിറ്റ് പേയ്‌മെന്റ് നിയമങ്ങൾ',
+    revisitFirstLabel: 'ആദ്യ സന്ദർശനം',
+    revisitFirst: 'ഇൻസെന്റീവ് + എക്സ്ട്രാ മൈൽ (യോഗ്യതയുണ്ടെങ്കിൽ). വിസിറ്റ് ചാർജ് ഇല്ല.',
+    revisitSecondLabel: 'രണ്ടാം സന്ദർശനം',
+    revisitSecond: 'വിസിറ്റ് ചാർജ് + ഓൺ-ടൈം ഇൻസെന്റീവ് + എക്സ്ട്രാ മൈൽ (യോഗ്യതയുണ്ടെങ്കിൽ).',
+    spareTitle: 'സ്പെയർ പാർട്സ്',
+    spare1: 'സ്പെയർ പാർട്സ് UC Partner App പ്രക്രിയയിലൂടെ മാത്രം ഓർഡർ ചെയ്ത് ഘടിപ്പിക്കുക.',
+    spare2: 'സ്പെയറിന്റെ യഥാർത്ഥ തുക ബാധകമായ പ്രക്രിയ അനുസരിച്ച് നിങ്ങളുടെ Smart Wallet-ൽ കാണിക്കും.',
+    spare3: 'ഘടിപ്പിച്ച സ്പെയറുകൾക്ക് നയപ്രകാരം അധികമായി {spare}% പേയ്‌മെന്റ് ലഭിക്കും.',
+    kitTitle: 'റിഫ്രഷർ കിറ്റ്',
+    kit1: 'കിറ്റ് തുക: ₹{kit}.',
+    kit2: 'ഈ തുക നിങ്ങളുടെ പേഔട്ടിൽ നിന്ന് മുൻകൂട്ടി കുറച്ചേക്കാം.',
+    kit3: 'ബന്ധപ്പെട്ട ജോലി ഡെലിവർ ചെയ്ത ശേഷം, നയപ്രകാരം റീഫണ്ട് പ്രോസസ് ചെയ്യും.',
+    kit4: 'ജോലി നൽകുന്നതിന് മുമ്പ് തുക കുറച്ചിട്ടുണ്ടെങ്കിലും, നയപ്രകാരം ഡെലിവറിക്ക് ശേഷം മാത്രമേ റീഫണ്ട് പ്രോസസ് ചെയ്യൂ.',
+    tdsTitle: 'TDS',
+    tds1: 'ഇൻസെന്റീവുകളിൽ {tds}% TDS കുറയ്ക്കും.',
+    tds2: 'യഥാർത്ഥ കിഴിവുകൾ ബാധകമായ നികുതി നിയമങ്ങളെ ആശ്രയിച്ചിരിക്കും. കൃത്യമായ തുകയ്ക്ക് നിങ്ങളുടെ പേഔട്ട് സ്റ്റേറ്റ്‌മെന്റ് കാണുക.',
+    supportTitle: 'സഹായ കോൺടാക്റ്റുകൾ', supportSub: 'വിളിക്കാൻ നമ്പറിൽ ടാപ്പ് ചെയ്യുക.', call: 'വിളിക്കുക',
+    noteTitle: 'ശ്രദ്ധിക്കുക',
+    disclaimer: 'ഈ ഗൈഡ് നിലവിൽ ക്രമീകരിച്ചിരിക്കുന്ന പേയ്‌മെന്റ് നയം കാണിക്കുന്നു. നയം മാറാം. എന്തെങ്കിലും സംശയമുണ്ടെങ്കിൽ സഹായ ടീമിനെ ബന്ധപ്പെടുക.',
+    nextHint: 'അടുത്ത ഘട്ടം: നിങ്ങളുടെ പ്രശ്നം രേഖപ്പെടുത്തുക (ഫോം ഇംഗ്ലീഷിലാണ്).',
+    days: { MON: 'തിങ്കൾ', TUE: 'ചൊവ്വ', WED: 'ബുധൻ', THU: 'വ്യാഴം', FRI: 'വെള്ളി', SAT: 'ശനി', SUN: 'ഞായർ' }
+  }
+};
+</script>
+
+  <script>
+/**
+ * JavaScript.html — partner portal behaviour.
+ * Flow: Page 1 (details + language) → Page 2 (payment guide, selected language) →
+ *       Page 3 (escalation form + review, always English) → Page 4 (confirmation, English) → Tracking.
+ * Client-side checks are for convenience; the server validates everything again.
+ */
+(function () {
+  'use strict';
+  var BOOT = window.BOOT || {};
+  var $ = function (id) { return document.getElementById(id); };
+  var esc = UI.esc;
+
+  var state = UI.session.get('uc_ph_state', null) || {};
+  state.partner = state.partner || { fullName: '', mobile: '', language: '' };
+  state.page = 1;
+  state.reviewing = false;
+  state.file = null;
+  state.submitting = false;
+  state.policy = BOOT.policy || {};
+  // Hosted copy (GitHub Pages): BOOT is a build-time snapshot, so fetch the latest payment policy.
+  if (window.API_URL) UI.run('getPublicPolicy').then(function (p) { if (p) state.policy = p; }).catch(function () { /* keep snapshot */ });
+
+  function saveState() {
+    UI.session.set('uc_ph_state', { partner: state.partner, otpToken: state.otpToken || '' });
+  }
+
+  /* ---------- i18n ---------- */
+  function lang() { return state.partner.language || 'en'; }
+  function t(key, vars, forceLang) {
+    var l = forceLang || lang();
+    var dict = window.I18N[l] || window.I18N.en;
+    var s = dict[key];
+    if (s === undefined) s = window.I18N.en[key];
+    if (s === undefined) return key;
+    if (typeof s !== 'string') return s;
+    return s.replace(/\{(\w+)\}/g, function (m, k) { return vars && vars[k] !== undefined ? vars[k] : m; });
+  }
+  function num(n) { return Number(n).toLocaleString('en-IN', { maximumFractionDigits: 2 }); }
+  function policyVars() {
+    var p = state.policy;
+    var km = Number(p.EXTRA_MILE_THRESHOLD_KM), rate = Number(p.EXTRA_MILE_RATE_PER_KM);
+    var exKm = km + 12, exEl = 12;
+    var dayNames = t('days');
+    if (typeof dayNames !== 'object') dayNames = window.I18N.en.days;
+    return {
+      visit: num(p.VISIT_CHARGE), ontime: num(p.ONTIME_INCENTIVE), rating: num(p.RATING_INCENTIVE),
+      km: num(km), rate: num(rate), spare: num(p.SPARE_INSTALL_BONUS_PERCENT), kit: num(p.REFRESHER_KIT_AMOUNT),
+      tds: num(p.TDS_PERCENT), exKm: num(exKm), exEl: num(exEl), exAmt: num(exEl * rate),
+      days: (p.PAYOUT_DAYS || []).map(function (d) { return dayNames[d] || d; }).join(', ')
+    };
+  }
+  /** Applies translations to elements with data-t / data-tph inside a root (Pages 1–2 only). */
+  function applyI18n(root) {
+    root.querySelectorAll('[data-t]').forEach(function (el) { el.textContent = t(el.getAttribute('data-t')); });
+    root.querySelectorAll('[data-tph]').forEach(function (el) { el.setAttribute('placeholder', t(el.getAttribute('data-tph'))); });
+  }
+
+  /* ---------- Stepper & navigation ---------- */
+  function renderStepper() {
+    var useLang = state.page <= 2 ? lang() : 'en';
+    var labels = t('steps', null, useLang);
+    var html = '';
+    for (var i = 1; i <= 4; i++) {
+      var cls = i < state.page ? 'done' : i === state.page ? 'active' : '';
+      html += '<div class="step ' + cls + '" role="listitem" aria-current="' + (i === state.page ? 'step' : 'false') + '"><div class="bar"></div><div class="lbl">' + esc(labels[i - 1]) + '</div></div>';
+    }
+    $('stepper').innerHTML = html;
+    $('stepCount').textContent = (useLang === 'en' ? 'Step ' : '') + state.page + ' / 4';
+  }
+
+  function show(id) {
+    ['page1', 'page2', 'page3', 'page4', 'track'].forEach(function (p) { $(p).classList.toggle('hidden', p !== id); });
+    $('stepperWrap').classList.toggle('hidden', id === 'track');
+    window.scrollTo(0, 0);
+  }
+
+  function go(page) {
+    state.page = page;
+    state.view = 'flow';
+    show('page' + page);
+    document.documentElement.lang = page <= 2 ? ({ hinglish: 'hi-Latn' }[lang()] || lang()) : 'en';
+    if (page === 1) applyI18n($('page1'));
+    if (page === 2) renderGuide();
+    if (page === 3) enterForm();
+    renderStepper();
+    renderActions();
+  }
+
+  function renderActions() {
+    var back = $('backBtn'), next = $('nextBtn');
+    $('actions').classList.toggle('hidden', state.view === 'track');
+    back.classList.remove('hidden');
+    next.disabled = false;
+    if (state.page === 1) {
+      back.classList.add('hidden');
+      $('nextLbl').textContent = t('next');
+    } else if (state.page === 2) {
+      $('backLbl').textContent = t('back');
+      $('nextLbl').textContent = t('next');
+    } else if (state.page === 3 && !state.reviewing) {
+      $('backLbl').textContent = 'Back';
+      $('nextLbl').textContent = 'Review Complaint';
+    } else if (state.page === 3 && state.reviewing) {
+      $('backLbl').textContent = 'Edit';
+      $('nextLbl').textContent = 'Submit Complaint';
+    } else if (state.page === 4) {
+      $('backLbl').textContent = 'Submit another';
+      $('nextLbl').textContent = 'Track Complaint';
+    }
+  }
+
+  $('nextBtn').addEventListener('click', function () {
+    if (state.page === 1) return submitPage1();
+    if (state.page === 2) return go(3);
+    if (state.page === 3 && !state.reviewing) return openReview();
+    if (state.page === 3 && state.reviewing) return submitComplaint();
+    if (state.page === 4) return openTrack(state.result);
+  });
+  $('backBtn').addEventListener('click', function () {
+    if (state.page === 2) return go(1);
+    if (state.page === 3 && state.reviewing) return closeReview();
+    if (state.page === 3) return go(2);
+    if (state.page === 4) return resetComplaint();
+  });
+
+  /* ---------- Field errors ---------- */
+  function setError(fieldId, msg) {
+    var f = $('f-' + fieldId);
+    if (!f) { if (msg) UI.toast(msg, 'error'); return; }
+    f.classList.toggle('invalid', !!msg);
+    var e = f.querySelector('.error');
+    if (e) e.innerHTML = msg ? UI.icon('alert', 'sm') + '<span>' + esc(msg) + '</span>' : '';
+  }
+  function focusFirstError(root) {
+    var f = root.querySelector('.field.invalid');
+    if (!f) return;
+    f.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    var input = f.querySelector('input:not([type=radio]), select, textarea') || f.querySelector('input');
+    if (input) setTimeout(function () { input.focus({ preventScroll: true }); }, 250);
+  }
+  function normMobile(v) {
+    var d = String(v || '').replace(/\D/g, '');
+    if (d.length === 12 && d.indexOf('91') === 0) d = d.slice(2);
+    if (d.length === 11 && d.charAt(0) === '0') d = d.slice(1);
+    return /^[6-9]\d{9}$/.test(d) ? d : '';
+  }
+  function maskMobile(m) { return m ? '+91 ' + m.slice(0, 5) + ' ' + m.slice(5) : ''; }
+
+  /* ---------- Page 1 ---------- */
+  function renderLanguages() {
+    $('langGrid').innerHTML = (BOOT.languages || []).map(function (l) {
+      var sub = l.code === 'hinglish' ? 'Hindi in English letters' : l.native !== l.label ? l.label : '';
+      return '<label class="lang-opt"><input type="radio" name="language" value="' + esc(l.code) + '"' + (state.partner.language === l.code ? ' checked' : '') + '>' +
+        '<span><b>' + esc(l.native) + '</b>' + (sub ? '<small>' + esc(sub) + '</small>' : '') + '</span></label>';
+    }).join('');
+    $('langGrid').querySelectorAll('input').forEach(function (r) {
+      r.addEventListener('change', function () {
+        state.partner.language = r.value;
+        setError('language', '');
+        applyI18n($('page1'));
+        renderStepper(); renderActions();
+        saveState();
+      });
+    });
+  }
+
+  function readPage1() {
+    return {
+      fullName: $('fullName').value.replace(/\s+/g, ' ').trim(),
+      mobile: normMobile($('mobile').value),
+      language: (document.querySelector('input[name=language]:checked') || {}).value || ''
+    };
+  }
+  function validatePage1(v) {
+    var ok = true;
+    if (!v.fullName || v.fullName.length < 2) { setError('fullName', t('errName')); ok = false; } else setError('fullName', '');
+    if (!v.mobile) { setError('mobile', t('errMobile')); ok = false; } else setError('mobile', '');
+    if (!v.language) { setError('language', t('errLang')); ok = false; } else setError('language', '');
+    return ok;
+  }
+
+  function submitPage1() {
+    var v = readPage1();
+    if (!validatePage1(v)) { focusFirstError($('page1')); return; }
+    if (BOOT.otpEnabled && !(state.otpToken && state.otpMobile === v.mobile)) {
+      $('otpBlock').classList.remove('hidden');
+      UI.toast(t('otpRequired'), 'error');
+      return;
+    }
+    var btn = $('nextBtn');
+    btn.disabled = true; $('nextLbl').textContent = t('checking');
+    UI.run('checkPartnerDetails', v).then(function (res) {
+      if (!res.ok) {
+        Object.keys(res.errors || {}).forEach(function (k) { setError(k, k === 'fullName' ? t('errName') : k === 'mobile' ? t('errMobile') : k === 'language' ? t('errLang') : res.errors[k]); });
+        focusFirstError($('page1'));
+        return;
+      }
+      state.partner = res.value;
+      saveState();
+      go(2);
+    }).catch(function (err) { UI.toast(err.message, 'error'); })
+      .then(function () { btn.disabled = false; renderActions(); });
+  }
+
+  ['fullName', 'mobile'].forEach(function (id) {
+    $(id).addEventListener('input', function () { if ($('f-' + id).classList.contains('invalid')) setError(id, ''); });
+  });
+  $('form1').addEventListener('submit', function (e) { e.preventDefault(); submitPage1(); });
+
+  /* OTP (only when the server says an SMS provider is configured) */
+  if (BOOT.otpEnabled) {
+    $('otpBlock').classList.remove('hidden');
+    $('otpTrack').classList.remove('hidden');
+  }
+  $('otpSendBtn').addEventListener('click', function () {
+    var m = normMobile($('mobile').value);
+    if (!m) { setError('mobile', t('errMobile')); return; }
+    var b = this; b.disabled = true;
+    UI.run('requestOtp', { mobile: m }).then(function (r) {
+      $('otpSentMsg').textContent = t('otpSent', { m: r.maskedMobile });
+      $('otpEntry').classList.remove('hidden');
+      $('otpCode').focus();
+    }).catch(function (err) { UI.toast(err.message, 'error'); }).then(function () { b.disabled = false; });
+  });
+  $('otpVerifyBtn').addEventListener('click', function () {
+    var m = normMobile($('mobile').value);
+    var b = this; b.disabled = true;
+    UI.run('verifyOtp', { mobile: m, code: $('otpCode').value }).then(function (r) {
+      state.otpToken = r.otpToken; state.otpMobile = m;
+      $('otpOk').classList.remove('hidden'); $('otpEntry').classList.add('hidden');
+      saveState();
+    }).catch(function (err) { UI.toast(err.message, 'error'); }).then(function () { b.disabled = false; });
+  });
+
+  /* ---------- Page 2: payment guide ---------- */
+  function gcard(iconName, title, amount, body) {
+    return '<article class="gcard"><div class="gcard-head"><div class="icon-badge">' + UI.icon(iconName) + '</div><h3>' + esc(title) + '</h3>' +
+      (amount ? '<span class="amount">' + esc(amount) + '</span>' : '') + '</div><div class="mt-12">' + body + '</div></article>';
+  }
+  function p(s) { return '<p>' + esc(s) + '</p>'; }
+  function ul(items) { return '<ul>' + items.map(function (s) { return '<li>' + esc(s) + '</li>'; }).join('') + '</ul>'; }
+
+  function renderGuide() {
+    applyI18n($('page2'));
+    var v = policyVars();
+    var current = (BOOT.languages || []).filter(function (l) { return l.code === lang(); })[0] || { native: 'English' };
+    $('langPill').innerHTML = UI.icon('globe', 'sm') + '<span>' + esc(t('langLabel')) + ': ' + esc(current.native) + '</span>';
+    var html = '';
+    html += gcard('wallet', t('visitTitle'), '₹' + v.visit, p(t('visitBody', v)));
+    html += gcard('clock', t('ontimeTitle'), '₹' + v.ontime, p(t('ontimeBody', v)));
+    html += gcard('star', t('ratingTitle'), '₹' + v.rating, p(t('ratingBody', v)) +
+      '<h3 class="mt-12">' + esc(t('ratingHowTitle')) + '</h3>' +
+      '<div class="path"><span>Customer App</span><i>→</i><span>Account</span><i>→</i><span>My Bookings</span><i>→</i><span>Rating</span></div>' +
+      p(t('ratingAsk')));
+    html += gcard('route', t('extraTitle'), '₹' + v.rate + '/km', p(t('extraBody', v)) +
+      '<div class="notice warn mt-8">' + UI.icon('alert') + '<span>' + esc(t('extraNote', v)) + '</span></div>' +
+      '<div class="example">' + esc(t('extraExample', v)) + '</div>' +
+      '<div class="calc"><label class="label" for="calcKm" style="margin:8px 0 0">' + esc(t('calcTitle')) + ' — ' + esc(t('calcLabel')) + '</label>' +
+      '<input class="input" id="calcKm" type="number" inputmode="decimal" min="0" max="2000" step="0.1" placeholder="' + esc(v.exKm) + '">' +
+      '<div class="calc-out" id="calcOut" aria-live="polite"></div></div>');
+    html += gcard('calendar', t('payoutTitle'), '', p(t('payoutBody', v)) + ul([t('payoutFirst'), t('payoutNext')]) +
+      '<p class="small muted mt-8">' + esc(t('payoutNote')) + '</p>');
+    html += gcard('repeat', t('revisitTitle'), '', '<div class="visit-grid">' +
+      '<div class="visit-box"><b>' + esc(t('revisitFirstLabel')) + '</b>' + esc(t('revisitFirst')) + '</div>' +
+      '<div class="visit-box"><b>' + esc(t('revisitSecondLabel')) + '</b>' + esc(t('revisitSecond')) + '</div></div>');
+    html += gcard('tool', t('spareTitle'), '+' + v.spare + '%', ul([t('spare1'), t('spare2'), t('spare3', v)]));
+    html += gcard('box', t('kitTitle'), '₹' + v.kit, ul([t('kit1', v), t('kit2'), t('kit3'), t('kit4')]));
+    html += gcard('percent', t('tdsTitle'), v.tds + '%', p(t('tds1', v)) + '<p class="small muted mt-8">' + esc(t('tds2')) + '</p>');
+    html += '<div class="notice mt-16">' + UI.icon('info') + '<div><b>' + esc(t('noteTitle')) + '</b><br>' + esc(t('disclaimer')) + '</div></div>';
+    html += '<p class="small muted mt-16" style="text-align:center">' + esc(t('nextHint')) + '</p>';
+    $('guide').innerHTML = html;
+    $('calcKm').addEventListener('input', updateCalc);
+  }
+  function updateCalc() {
+    var km = Number(state.policy.EXTRA_MILE_THRESHOLD_KM), rate = Number(state.policy.EXTRA_MILE_RATE_PER_KM);
+    var raw = $('calcKm').value;
+    var d = Number(raw);
+    var out = $('calcOut');
+    if (raw === '' || isNaN(d) || d < 0) { out.textContent = ''; return; }
+    if (d <= km) { out.textContent = t('calcNone', { km: num(km) }); return; }
+    var el = Math.round((d - km) * 10) / 10;
+    out.textContent = t('calcResult', { el: num(el), amt: num(Math.round(el * rate * 100) / 100) });
+  }
+  $('langPill').addEventListener('click', function () { go(1); setTimeout(function () { $('langGrid').scrollIntoView({ block: 'center' }); }, 50); });
+
+  /* ---------- Page 3: escalation form (English) ---------- */
+  var CATS = BOOT.categories || [];
+  function findCat(name) { return CATS.filter(function (c) { return c.name === name; })[0]; }
+  function fieldsFor(cat, sub) {
+    if (!cat) return [];
+    var f = (cat.fields || []).slice();
+    ((cat.subFields && cat.subFields[sub]) || []).forEach(function (x) { if (f.indexOf(x) < 0) f.push(x); });
+    return f;
+  }
+  var COND = ['customerMobile', 'jobDate', 'jobReference', 'expectedAmount', 'receivedAmount'];
+
+  $('category').innerHTML = '<option value="">Select a category</option>' + CATS.map(function (c) { return '<option>' + esc(c.name) + '</option>'; }).join('');
+  $('jobDate').max = new Date(Date.now() + 5.5 * 3600 * 1000).toISOString().slice(0, 10);
+
+  function enterForm() {
+    state.reviewing = false;
+    $('formView').classList.remove('hidden');
+    $('reviewView').classList.add('hidden');
+    var pt = state.partner;
+    $('sumName').textContent = pt.fullName;
+    $('sumMobile').textContent = maskMobile(pt.mobile);
+    $('sumAvatar').textContent = (pt.fullName || '?').charAt(0).toUpperCase();
+    $('roName').value = pt.fullName;
+    $('roMobile').value = maskMobile(pt.mobile);
+  }
+  $('editDetails').addEventListener('click', function () { go(1); });
+
+  $('category').addEventListener('change', function () {
+    var cat = findCat(this.value);
+    setError('category', '');
+    var sub = $('subcategory');
+    sub.innerHTML = '<option value="">Select a subcategory</option>' + (cat ? cat.subs.map(function (s) { return '<option>' + esc(s) + '</option>'; }).join('') : '');
+    if (cat && cat.subs.length === 1) sub.value = cat.subs[0];
+    $('f-subcategory').classList.toggle('hidden', !cat);
+    setError('subcategory', '');
+    updateCond();
+  });
+  $('subcategory').addEventListener('change', function () { setError('subcategory', ''); updateCond(); });
+
+  function updateCond() {
+    var cat = findCat($('category').value);
+    var sub = $('subcategory').value;
+    var allowed = cat && sub ? fieldsFor(cat, sub) : [];
+    COND.forEach(function (k) {
+      var on = allowed.indexOf(k) >= 0;
+      $('f-' + k).classList.toggle('hidden', !on);
+      if (!on) { $(k).value = ''; setError(k, ''); }
+    });
+    $('condFields').classList.toggle('hidden', allowed.length === 0);
+  }
+
+  $('description').addEventListener('input', function () {
+    $('descCount').textContent = this.value.length + ' / 2000';
+    if ($('f-description').classList.contains('invalid')) setError('description', '');
+  });
+  $('confirm').addEventListener('change', function () { if (this.checked) setError('confirm', ''); });
+  COND.forEach(function (k) { $(k).addEventListener('input', function () { setError(k, ''); }); });
+
+  /* File upload: type and size checked before anything is sent. */
+  var MAX = BOOT.maxFileBytes || 10 * 1024 * 1024;
+  $('file').addEventListener('change', function () {
+    var f = this.files && this.files[0];
+    setError('file', '');
+    if (!f) return;
+    var ext = (f.name.split('.').pop() || '').toLowerCase();
+    var okType = ['jpg', 'jpeg', 'png', 'pdf'].indexOf(ext) >= 0 && (!f.type || (BOOT.allowedMime || []).indexOf(f.type) >= 0);
+    if (!okType) { setError('file', 'Only JPG, PNG or PDF files are allowed.'); this.value = ''; return; }
+    if (f.size > MAX) { setError('file', 'This file is ' + (f.size / 1048576).toFixed(1) + ' MB. The maximum is 10 MB.'); this.value = ''; return; }
+    if (f.size === 0) { setError('file', 'The selected file is empty.'); this.value = ''; return; }
+    var reader = new FileReader();
+    var input = this;
+    reader.onload = function () {
+      var b64 = String(reader.result).split(',')[1] || '';
+      state.file = { name: f.name, mimeType: f.type || (ext === 'pdf' ? 'application/pdf' : ext === 'png' ? 'image/png' : 'image/jpeg'), base64: b64, size: f.size };
+      $('fileName').textContent = f.name;
+      $('fileSize').textContent = (f.size / 1024 < 1024 ? Math.ceil(f.size / 1024) + ' KB' : (f.size / 1048576).toFixed(1) + ' MB');
+      $('fileChip').classList.remove('hidden');
+      $('dropZone').classList.add('hidden');
+      input.value = '';
+    };
+    reader.onerror = function () { setError('file', 'The file could not be read. Please choose it again.'); };
+    reader.readAsDataURL(f);
+  });
+  $('fileRemove').addEventListener('click', function () {
+    state.file = null;
+    $('fileChip').classList.add('hidden');
+    $('dropZone').classList.remove('hidden');
+  });
+
+  function readComplaint() {
+    return {
+      category: $('category').value, subcategory: $('subcategory').value,
+      customerMobile: $('customerMobile').value.trim(), jobDate: $('jobDate').value, jobReference: $('jobReference').value.trim(),
+      expectedAmount: $('expectedAmount').value.trim(), receivedAmount: $('receivedAmount').value.trim(),
+      description: $('description').value.trim(), confirm: $('confirm').checked
+    };
+  }
+  function validAmount(v) { return v === '' || (/^\d{1,8}(\.\d{1,2})?$/.test(v.replace(/[₹,\s]/g, ''))); }
+  function validateComplaint(c) {
+    var ok = true;
+    var err = function (k, m) { setError(k, m); if (m) ok = false; };
+    var cat = findCat(c.category);
+    err('category', cat ? '' : 'Please select an issue category.');
+    err('subcategory', cat && cat.subs.indexOf(c.subcategory) < 0 ? 'Please select a subcategory.' : '');
+    var allowed = fieldsFor(cat, c.subcategory);
+    if (allowed.indexOf('customerMobile') >= 0) err('customerMobile', c.customerMobile && !normMobile(c.customerMobile) ? 'Customer mobile must be a valid 10-digit number.' : '');
+    if (allowed.indexOf('jobDate') >= 0) err('jobDate', c.jobDate && c.jobDate > $('jobDate').max ? 'Job date cannot be in the future.' : '');
+    if (allowed.indexOf('jobReference') >= 0) err('jobReference', c.jobReference && !/^[A-Za-z0-9#\/_.\- ]+$/.test(c.jobReference) ? 'Reference can contain letters, numbers, spaces and - _ / # . only.' : '');
+    if (allowed.indexOf('expectedAmount') >= 0) err('expectedAmount', validAmount(c.expectedAmount) ? '' : 'Enter a valid amount in ₹ (numbers only).');
+    if (allowed.indexOf('receivedAmount') >= 0) err('receivedAmount', validAmount(c.receivedAmount) ? '' : 'Enter a valid amount in ₹ (numbers only).');
+    err('description', !c.description ? 'Please describe the issue.' : c.description.length < 15 ? 'Please add a little more detail (at least 15 characters).' : '');
+    err('confirm', c.confirm ? '' : 'Please confirm that the information is correct.');
+    return ok;
+  }
+
+  function openReview() {
+    var c = readComplaint();
+    if (!validateComplaint(c)) { focusFirstError($('formView')); UI.toast('Please fix the highlighted fields.', 'error'); return; }
+    state.complaint = c;
+    if (!state.submissionKey) state.submissionKey = UI.uuid();
+    var cat = findCat(c.category);
+    var allowed = fieldsFor(cat, c.subcategory);
+    var labels = { customerMobile: 'Customer Mobile Number', jobDate: 'Job Date', jobReference: 'Job / Booking Reference', expectedAmount: 'Expected Amount', receivedAmount: 'Received / Deducted Amount' };
+    var rows = function (pairs) { return '<dl class="dl">' + pairs.map(function (pr) { return '<dt>' + esc(pr[0]) + '</dt><dd>' + esc(pr[1]) + '</dd>'; }).join('') + '</dl>'; };
+    var job = allowed.map(function (k) {
+      var v = c[k];
+      if (!v) return [labels[k], '—'];
+      if (k === 'expectedAmount' || k === 'receivedAmount') v = UI.money(v.replace(/[₹,\s]/g, ''));
+      if (k === 'jobDate') v = UI.fmtDate(v, BOOT.tz);
+      if (k === 'customerMobile') v = maskMobile(normMobile(v));
+      return [labels[k], v];
+    });
+    var html = '<div class="review-group"><div class="row"><h3 style="flex:1">Partner details</h3><button type="button" class="btn btn-ghost btn-sm" data-edit="p1">' + UI.icon('edit', 'sm') + 'Edit</button></div>' +
+      rows([['Full Name', state.partner.fullName], ['Registered Mobile', maskMobile(state.partner.mobile)]]) + '</div>';
+    html += '<div class="review-group"><div class="row"><h3 style="flex:1">Issue</h3><button type="button" class="btn btn-ghost btn-sm" data-edit="form">' + UI.icon('edit', 'sm') + 'Edit</button></div>' +
+      rows([['Category', c.category], ['Subcategory', c.subcategory]].concat(job).concat([['Description', c.description], ['Supporting proof', state.file ? state.file.name : 'None attached']])) + '</div>';
+    $('reviewBody').innerHTML = html;
+    $('reviewBody').querySelectorAll('[data-edit]').forEach(function (b) {
+      b.addEventListener('click', function () { if (b.getAttribute('data-edit') === 'p1') { closeReview(); go(1); } else closeReview(); });
+    });
+    state.reviewing = true;
+    $('formView').classList.add('hidden');
+    $('reviewView').classList.remove('hidden');
+    window.scrollTo(0, 0);
+    renderActions();
+  }
+  function closeReview() {
+    state.reviewing = false;
+    state.submissionKey = null; // edits create a new submission
+    $('formView').classList.remove('hidden');
+    $('reviewView').classList.add('hidden');
+    renderActions();
+  }
+
+  function submitComplaint() {
+    if (state.submitting) return;
+    state.submitting = true;
+    $('nextBtn').disabled = true; $('backBtn').disabled = true;
+    UI.showLoading(state.file ? 'Uploading proof and submitting…' : 'Submitting your complaint…');
+    var payload = { partner: state.partner, complaint: state.complaint, file: state.file, submissionKey: state.submissionKey, otpToken: state.otpToken || '' };
+    UI.run('submitComplaint', payload).then(function (res) {
+      if (!res.ok) {
+        closeReview();
+        var partnerErr = false;
+        Object.keys(res.errors || {}).forEach(function (k) {
+          if (k === 'fullName' || k === 'mobile' || k === 'language') partnerErr = true; else setError(k, res.errors[k]);
+        });
+        if (partnerErr) { UI.toast('Please check your name and mobile number.', 'error'); go(1); }
+        else { focusFirstError($('formView')); UI.toast('Please fix the highlighted fields.', 'error'); }
+        return;
+      }
+      state.result = { complaintId: res.complaintId, trackingKey: res.trackingKey, mobile: state.partner.mobile, category: res.category, subcategory: res.subcategory, createdAt: res.createdAt, status: res.status };
+      rememberComplaint(state.result);
+      showConfirmation(res);
+    }).catch(function (err) {
+      UI.toast(err.message, 'error');
+    }).then(function () {
+      UI.hideLoading();
+      state.submitting = false;
+      $('nextBtn').disabled = false; $('backBtn').disabled = false;
+    });
+  }
+
+  /* ---------- Support contacts (only after a complaint exists) ---------- */
+  function supportCard(contacts, complaintId) {
+    contacts = (contacts || []).filter(function (c) { return /^[6-9]\d{9}$/.test(String(c.mobile)); });
+    if (!contacts.length) return '';
+    return '<div class="card mt-12"><h3>' + UI.icon('phone', 'sm') + ' Need to talk to support?</h3>' +
+      '<p class="small muted mt-4">Tap a number to open your phone dialer. Keep your complaint ID ' + (complaintId ? '<b>' + esc(complaintId) + '</b> ' : '') + 'ready when you call.</p>' +
+      '<div class="call-list">' + contacts.map(function (c) {
+        var m = String(c.mobile);
+        return '<a class="call-row" href="tel:+91' + esc(m) + '" target="_top" aria-label="Call ' + esc(c.name) + ' on +91 ' + esc(m) + '">' +
+          '<span class="avatar" aria-hidden="true">' + esc(String(c.name).charAt(0).toUpperCase()) + '</span>' +
+          '<span class="who"><b>' + esc(c.name) + '</b><span>+91 ' + esc(m.slice(0, 5) + ' ' + m.slice(5)) + '</span></span>' +
+          '<span class="dial" aria-hidden="true">' + UI.icon('phone', 'sm') + 'Call</span></a>';
+      }).join('') + '</div></div>';
+  }
+
+  /* ---------- Page 4 ---------- */
+  function showConfirmation(res) {
+    $('cId').textContent = res.complaintId;
+    $('cKey').textContent = res.trackingKey;
+    $('cCat').textContent = res.category + ' — ' + res.subcategory;
+    $('cDate').textContent = UI.fmtDateTime(res.createdAt, BOOT.tz);
+    $('cStatus').innerHTML = UI.statusBadge(res.status);
+    $('cSupport').innerHTML = supportCard(res.supportContacts, res.complaintId);
+    $('cAuto').innerHTML = res.autoReply ? '<div class="notice mt-12">' + UI.icon('info') + '<div><b>Update from support</b><br>' + esc(res.autoReply) + '</div></div>' : '';
+    if (res.duplicate) UI.toast('This complaint was already submitted. Showing the original complaint ID.', '');
+    else UI.toast('Complaint submitted successfully.', 'success');
+    state.reviewing = false;
+    go(4);
+  }
+  document.querySelectorAll('[data-copy]').forEach(function (b) {
+    b.addEventListener('click', function () {
+      UI.copyText($(b.getAttribute('data-copy')).textContent).then(function (ok) { UI.toast(ok ? 'Copied' : 'Could not copy. Please note it down.', ok ? 'success' : 'error'); });
+    });
+  });
+
+  function resetComplaint() {
+    $('form3').reset();
+    $('category').dispatchEvent(new Event('change'));
+    $('fileRemove').click();
+    $('descCount').textContent = '0 / 2000';
+    $('form3').querySelectorAll('.field.invalid').forEach(function (f) { f.classList.remove('invalid'); });
+    state.complaint = null; state.submissionKey = null; state.result = null;
+    go(3);
+  }
+
+  /* ---------- Saved complaints on this device ---------- */
+  function rememberComplaint(r) {
+    var list = UI.local.get('uc_ph_mine', []).filter(function (x) { return x.complaintId !== r.complaintId; });
+    list.unshift({ complaintId: r.complaintId, trackingKey: r.trackingKey, mobile: r.mobile, category: r.category, createdAt: r.createdAt });
+    UI.local.set('uc_ph_mine', list.slice(0, 20));
+  }
+  function renderMyList() {
+    var list = UI.local.get('uc_ph_mine', []);
+    $('myListCard').classList.toggle('hidden', !list.length);
+    $('myList').innerHTML = list.map(function (x, i) {
+      return '<div class="item"><div style="flex:1;min-width:0"><div style="font-weight:600">' + esc(x.complaintId) + '</div><div class="tiny muted">' + esc(x.category) + ' · ' + esc(UI.fmtDate(x.createdAt, BOOT.tz)) + '</div></div>' +
+        '<button type="button" class="btn btn-secondary btn-sm" data-mine="' + i + '">View</button></div>';
+    }).join('');
+    $('myList').querySelectorAll('[data-mine]').forEach(function (b) {
+      b.addEventListener('click', function () { var x = list[+b.getAttribute('data-mine')]; fillTrack(x); doTrack(); });
+    });
+  }
+
+  /* ---------- Tracking ---------- */
+  function openTrack(prefill) {
+    state.view = 'track';
+    show('track');
+    renderActions();
+    $('trackResult').innerHTML = '';
+    renderMyList();
+    if (prefill) { fillTrack(prefill); doTrack(); }
+    else if (state.partner.mobile && !$('tMobile').value) $('tMobile').value = state.partner.mobile;
+  }
+  function fillTrack(x) { $('tId').value = x.complaintId; $('tMobile').value = x.mobile; $('tKey').value = x.trackingKey; }
+  $('openTrack1').addEventListener('click', function () { openTrack(null); });
+  $('trackBack').addEventListener('click', function () { go(state.result ? 4 : (state.page || 1)); });
+
+  function readTrack() {
+    return { complaintId: $('tId').value.trim().toUpperCase(), mobile: normMobile($('tMobile').value), trackingKey: $('tKey').value.trim().toUpperCase() };
+  }
+  function validateTrack(v) {
+    var ok = true;
+    if (!/^[A-Z]{2,5}-\d{4}-\d{5,}$/.test(v.complaintId)) { setError('tId', 'Enter the complaint ID, e.g. UC-2026-00001.'); ok = false; } else setError('tId', '');
+    if (!v.mobile) { setError('tMobile', 'Enter your 10-digit registered mobile number.'); ok = false; } else setError('tMobile', '');
+    if (v.trackingKey.replace(/[^A-Z0-9]/g, '').length !== 12) { setError('tKey', 'Enter the 12-character tracking key, e.g. ABCD-EFGH-JKMN.'); ok = false; } else setError('tKey', '');
+    return ok;
+  }
+  $('trackForm').addEventListener('submit', function (e) { e.preventDefault(); doTrack(); });
+
+  function doTrack() {
+    var v = readTrack();
+    if (!validateTrack(v)) { focusFirstError($('trackForm')); return; }
+    var btn = $('trackBtn'); btn.disabled = true;
+    $('trackResult').innerHTML = '<div class="card empty"><span class="spinner"></span><p class="mt-8">Loading your complaint…</p></div>';
+    UI.run('trackComplaint', v).then(function (c) {
+      state.trackCreds = v;
+      renderTracked([c], true);
+    }).catch(function (err) {
+      $('trackResult').innerHTML = '<div class="notice danger">' + UI.icon('alert') + '<span>' + esc(err.message) + '</span></div>';
+    }).then(function () { btn.disabled = false; });
+  }
+  $('otpListBtn').addEventListener('click', function () {
+    if (!state.otpToken) { UI.toast('Verify your mobile number with OTP on the first page, then come back here.', 'error'); return; }
+    $('trackResult').innerHTML = '<div class="card empty"><span class="spinner"></span></div>';
+    UI.run('listMyComplaints', { otpToken: state.otpToken }).then(function (list) {
+      if (!list.length) { $('trackResult').innerHTML = '<div class="card empty">' + UI.icon('inbox') + '<p>No complaints found for this number.</p></div>'; return; }
+      renderTracked(list, false);
+    }).catch(function (err) { $('trackResult').innerHTML = '<div class="notice danger">' + UI.icon('alert') + '<span>' + esc(err.message) + '</span></div>'; });
+  });
+
+  function renderTracked(list, canReply) {
+    $('trackResult').innerHTML = list.map(function (c) {
+      var tl = c.timeline.map(function (h) {
+        var head = h.previousStatus && h.previousStatus !== h.status ? 'Status changed to ' + h.status : (h.previousStatus ? 'Update' : 'Submitted');
+        return '<li><div class="t-head"><b>' + esc(head) + '</b>' + (h.previousStatus !== h.status ? UI.statusBadge(h.status) : '') + '</div>' +
+          '<div class="t-meta">' + esc(UI.fmtDateTime(h.at, BOOT.tz)) + ' · ' + esc(h.by) + '</div>' + (h.remark ? '<div class="t-body">' + esc(h.remark) + '</div>' : '') + '</li>';
+      }).join('');
+      var reply = canReply && c.canReply ?
+        '<div class="mt-16"><label class="label" for="replyText">' + (c.waitingForPartner ? 'The support team needs information from you' : 'Add more information') + '</label>' +
+        '<textarea class="input" id="replyText" maxlength="1500" placeholder="Type your reply"></textarea>' +
+        '<button type="button" class="btn btn-primary mt-8" id="replyBtn">' + UI.icon('send', 'sm') + 'Send reply</button></div>' : '';
+      return '<div class="card mt-12"><div class="row wrap"><div style="flex:1;min-width:0"><div class="tiny muted">Complaint ID</div><h2>' + esc(c.complaintId) + '</h2></div>' + UI.statusBadge(c.status) + '</div>' +
+        '<dl class="dl mt-12"><dt>Category</dt><dd>' + esc(c.category) + ' — ' + esc(c.subcategory) + '</dd><dt>Submitted</dt><dd>' + esc(UI.fmtDateTime(c.createdAt, BOOT.tz)) + '</dd>' +
+        '<dt>Last updated</dt><dd>' + esc(UI.fmtDateTime(c.updatedAt, BOOT.tz)) + '</dd>' + (c.resolvedAt ? '<dt>Resolved</dt><dd>' + esc(UI.fmtDateTime(c.resolvedAt, BOOT.tz)) + '</dd>' : '') + '</dl>' +
+        (c.resolution ? '<div class="notice mt-12">' + UI.icon('check') + '<div><b>Resolution</b><br>' + esc(c.resolution) + '</div></div>' : '') +
+        (c.remark && !c.resolution ? '<div class="notice mt-12">' + UI.icon('info') + '<div><b>Latest update from support</b><br>' + esc(c.remark) + '</div></div>' : '') +
+        '<h3 class="mt-16">Timeline</h3><ul class="timeline mt-12">' + tl + '</ul>' + reply + '</div>';
+    }).join('') + (list.length ? supportCard(list[0].supportContacts, list.length === 1 ? list[0].complaintId : '') : '');
+    var rb = $('replyBtn');
+    if (rb) rb.addEventListener('click', function () {
+      var msg = $('replyText').value.trim();
+      if (msg.length < 2) { UI.toast('Please type your reply.', 'error'); return; }
+      rb.disabled = true;
+      UI.run('partnerReply', Object.assign({}, state.trackCreds, { message: msg })).then(function (c) {
+        UI.toast('Reply sent to the support team.', 'success');
+        renderTracked([c], true);
+      }).catch(function (err) { UI.toast(err.message, 'error'); rb.disabled = false; });
+    });
+  }
+
+  /* ---------- Init ---------- */
+  UI.hydrateIcons(document);
+  renderLanguages();
+  $('fullName').value = state.partner.fullName || '';
+  $('mobile').value = state.partner.mobile || '';
+  go(1);
+
+  // Test hook (used by the automated browser tests; harmless in production).
+  window.__portal = { state: state, go: go, t: t };
+})();
+</script>
+
+</body>
+</html>
