@@ -281,14 +281,17 @@
   <div id="signin" class="denied hidden">
     <div class="card" style="text-align:left">
       <div class="icon-badge" style="margin:0 auto 12px" data-icon="lock"></div>
-      <h2 style="text-align:center">Admin sign-in</h2>
-      <p class="muted mt-8 small" style="text-align:center">We will email a 6-digit code to your admin email.</p>
+      <h2 style="text-align:center" id="siTitle">Admin sign-in</h2>
+      <p class="muted mt-8 small hidden" style="text-align:center" id="siHelp">We will email a 6-digit code to your admin email. Use it to set a new password.</p>
       <div class="field mt-12"><label class="label" for="siEmail">Admin email</label>
-        <input class="input" type="email" id="siEmail" autocomplete="email" placeholder="name@urbancompany.com"></div>
-      <div class="field mt-12 hidden" id="siCodeRow"><label class="label" for="siCode">6-digit code</label>
+        <input class="input" type="email" id="siEmail" autocomplete="username" placeholder="name@urbancompany.com"></div>
+      <div class="field mt-12 hidden" id="siCodeRow"><label class="label" for="siCode">6-digit code from email</label>
         <input class="input" id="siCode" inputmode="numeric" maxlength="6" autocomplete="one-time-code"></div>
+      <div class="field mt-12" id="siPassRow"><label class="label" for="siPass" id="siPassLabel">Password</label>
+        <input class="input" type="password" id="siPass" autocomplete="current-password"></div>
       <p class="error mt-8" id="siErr" role="alert"></p>
-      <button class="btn btn-primary mt-12" id="siBtn" style="width:100%">Send code</button>
+      <button class="btn btn-primary mt-12" id="siBtn" style="width:100%">Sign in</button>
+      <p class="small mt-12" style="text-align:center"><a href="#" id="siMode">Set or forgot password?</a></p>
     </div>
   </div>
 
@@ -728,32 +731,45 @@
     $('deniedMsg').textContent = err.message;
   });
 
-  /* ---------- Sign-in (hosted pages only: emailed one-time code) ---------- */
+  /* ---------- Sign-in (hosted pages only: email + password; emailed code to set or reset it) ---------- */
   function showSignIn() {
     UI.adminSession('');
     $('signin').classList.remove('hidden');
-    var codeSent = false;
+    var mode = 'login'; // 'login' | 'reset' (asking for a code) | 'newpass' (code sent)
+    function setMode(m) {
+      mode = m;
+      $('siErr').textContent = '';
+      $('siTitle').textContent = m === 'login' ? 'Admin sign-in' : 'Set a new password';
+      $('siHelp').classList.toggle('hidden', m === 'login');
+      $('siCodeRow').classList.toggle('hidden', m !== 'newpass');
+      $('siPassRow').classList.toggle('hidden', m === 'reset');
+      $('siPassLabel').textContent = m === 'newpass' ? 'New password (at least 8 characters)' : 'Password';
+      $('siPass').setAttribute('autocomplete', m === 'newpass' ? 'new-password' : 'current-password');
+      $('siPass').value = '';
+      $('siEmail').readOnly = m === 'newpass';
+      $('siBtn').textContent = m === 'login' ? 'Sign in' : m === 'reset' ? 'Email me a code' : 'Save password and sign in';
+      $('siMode').textContent = m === 'login' ? 'Set or forgot password?' : 'Back to sign-in';
+    }
+    function signedIn(r) { UI.adminSession(r.session); location.reload(); }
     function go() {
       var email = $('siEmail').value.trim().toLowerCase();
+      var pass = $('siPass').value;
       $('siErr').textContent = '';
       $('siBtn').disabled = true;
-      var p = !codeSent
-        ? UI.run('requestAdminCode', { email: email }).then(function () {
-            codeSent = true;
-            $('siCodeRow').classList.remove('hidden');
-            $('siEmail').readOnly = true;
-            $('siBtn').textContent = 'Sign in';
-            $('siCode').focus();
-            UI.toast('If ' + email + ' is an admin, a code is on its way. Check your inbox and spam.', 'success', 6000);
-          })
-        : UI.run('verifyAdminCode', { email: email, code: $('siCode').value.trim() }).then(function (r) {
-            UI.adminSession(r.session);
-            location.reload();
-          });
+      var p = mode === 'login'
+        ? UI.run('adminLogin', { email: email, password: pass }).then(signedIn)
+        : mode === 'reset'
+          ? UI.run('requestAdminCode', { email: email }).then(function () {
+              setMode('newpass');
+              $('siCode').focus();
+              UI.toast('If ' + email + ' is an admin, a code is on its way. Check your inbox and spam.', 'success', 6000);
+            })
+          : UI.run('setAdminPassword', { email: email, code: $('siCode').value.trim(), password: pass }).then(signedIn);
       p.catch(function (err) { $('siErr').textContent = err.message; }).then(function () { $('siBtn').disabled = false; });
     }
     $('siBtn').addEventListener('click', go);
-    ['siEmail', 'siCode'].forEach(function (id) {
+    $('siMode').addEventListener('click', function (e) { e.preventDefault(); setMode(mode === 'login' ? 'reset' : 'login'); });
+    ['siEmail', 'siCode', 'siPass'].forEach(function (id) {
       $(id).addEventListener('keydown', function (e) { if (e.key === 'Enter') go(); });
     });
     UI.hydrateIcons($('signin'));
